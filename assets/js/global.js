@@ -190,19 +190,54 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ============================================================
-  // 7. Navbar search — clicking the magnifier submits the search form
+  // 7. Navbar search — clicking the magnifier or pressing Enter submits search
   // ============================================================
-  document.querySelectorAll('.navbar-search').forEach((form) => {
-    const icon  = form.querySelector('.search-icon');
-    const input = form.querySelector('input');
-    if (icon && input) {
+  document.querySelectorAll('.navbar-search').forEach((container) => {
+    const icon  = container.querySelector('.search-icon');
+    const input = container.querySelector('input');
+    const form  = container.tagName === 'FORM' ? container : container.closest('form');
+
+    const executeSearch = () => {
+      const q = (input?.value || '').trim();
+      if (!q) {
+        if (input) input.focus();
+        return;
+      }
+      if (form && form.requestSubmit) {
+        form.requestSubmit();
+      } else {
+        const isPhp = window.location.pathname.endsWith('.php');
+        const target = isPhp ? (BASE + '/category-page.php') : 'category-page.html';
+        window.location.href = `${target}?s=${encodeURIComponent(q)}`;
+      }
+    };
+
+    if (icon) {
       icon.style.cursor = 'pointer';
-      icon.addEventListener('click', () => { if (input.value.trim() && form.requestSubmit) form.requestSubmit(); });
+      icon.addEventListener('click', (e) => {
+        e.preventDefault();
+        executeSearch();
+      });
       icon.addEventListener('keydown', (e) => {   // keyboard: Enter / Space on the search icon
-        if ((e.key === 'Enter' || e.key === ' ') && input.value.trim() && form.requestSubmit) { e.preventDefault(); form.requestSubmit(); }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          executeSearch();
+        }
       });
     }
-    form.addEventListener('submit', (e) => { if (!input || !input.value.trim()) e.preventDefault(); });
+
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        if (!input || !input.value.trim()) e.preventDefault();
+      });
+    } else if (input) {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          executeSearch();
+        }
+      });
+    }
   });
 
   // ============================================================

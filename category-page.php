@@ -18,7 +18,7 @@
 require_once __DIR__ . '/config/db.php';
 
 $active_slug   = trim($_GET['cat'] ?? '');
-$search        = trim($_GET['q'] ?? '');
+$search        = trim($_GET['q'] ?? $_GET['s'] ?? '');
 $category_data = [];   // slug => { name, icon, desc, count, subcats[], products[] }
 
 if ($pdo) {

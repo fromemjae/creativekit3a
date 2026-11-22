@@ -17,7 +17,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $active_nav   = $active_nav ?? '';
 $is_logged_in = isset($_SESSION['user_id']);
 $is_staff     = in_array($_SESSION['user_role'] ?? '', ['admin', 'staff'], true);
-$search_value = trim($_GET['q'] ?? '');
+$search_value = trim($_GET['q'] ?? $_GET['s'] ?? '');
 
 // -------------------------------------------------------------
 // Mega menu data: main category → subcategory columns → product links
