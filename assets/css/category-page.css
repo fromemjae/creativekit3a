@@ -1,275 +1,60 @@
+/* ============================================================
+   category-page.css — the catalogue (category-page.php / category-page.html), on top of storefront.css
+   One section: the title row, the categories, the filter and sort, then one group per subcategory.
+   A catalogue runs as long as the category is: the one section here grows with its products
+   (height auto) instead of the system's one-or-two-screen box.
+   ============================================================ */
 
-    /* ── Category Hero Banner ───────────────────────────────── */
-    .cat-hero {
-      background: linear-gradient(135deg, #fff8f3 0%, #fff0e5 100%);
-      border-bottom: 2px solid var(--orange-pale);
-      padding: 36px 0 32px;
-    }
+main > section.ck-catalog { height: auto; min-height: 100svh; padding-top: calc(var(--nav) + var(--s-7)); padding-bottom: var(--section, 96px); }
+main > section.ck-catalog > .wrap { height: auto; display: block; }
 
-    .cat-hero-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
+.ck-catalog__head { display: grid; gap: var(--s-4); margin-bottom: var(--s-7); }
+.ck-catalog__head h1 { font-size: var(--t-h1); line-height: 1.02; margin: 0; max-width: 16ch; }
+.ck-catalog__head .cat-hero-desc { margin-top: var(--s-4); font-size: var(--t-lead); line-height: 1.5; max-width: 52ch; color: var(--ink); }
+.ck-catalog__count { color: var(--muted); font-size: var(--t-body); margin: 0; }
+.ck-catalog__count .cat-hero-count { color: var(--ink); font-weight: 500; }
+.ck-catalog .ck-chips { margin: 0 0 var(--s-6); }
 
-    .cat-hero-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
+/* the filter (subcategory buttons) and the sort, on one line above the products */
+.ck-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-4); padding: var(--s-4) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.ck-filter { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.subcat-tab {
+  display: inline-flex; align-items: center; gap: var(--s-2); height: 44px; padding: 0 var(--s-4);
+  font: 500 15px/1 var(--font-text); color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line-strong); border-radius: var(--r-btn); cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+.subcat-tab:hover { background: var(--p-surface); border-color: var(--ink); }
+.subcat-tab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.subcat-tab .tab-count { font-size: 13px; color: inherit; opacity: .75; }
+.ck-sort { display: flex; align-items: center; gap: var(--s-3); }
+.ck-sort label { font: 500 14px/1 var(--font-text); color: var(--muted); }
+.sort-select {
+  height: 44px; padding: 0 40px 0 var(--s-4); font: 400 15px/1 var(--font-text); color: var(--ink);
+  background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='%231f1a17' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 14px center;
+  border: 1px solid var(--line-strong); border-radius: var(--r-btn); appearance: none; cursor: pointer;
+}
+.ck-showing { margin: var(--s-5) 0 var(--s-6); font-size: var(--t-small); color: var(--muted); }
+.ck-showing strong { color: var(--ink); font-weight: 500; }
 
-    .cat-hero-icon-box {
-      width: 64px;
-      height: 64px;
-      border-radius: var(--radius-md);
-      background: var(--gradient-hero);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: 0 4px 16px rgba(255, 107, 0, 0.25);
-      flex-shrink: 0;
-    }
+/* the products: one group per subcategory, each with its own grid */
+.cat-product-grid { display: grid; gap: var(--s-8); }
+.ck-group__head { display: flex; align-items: baseline; gap: var(--s-3); margin: 0 0 var(--s-5); font: var(--display-weight) var(--t-h3)/1.2 var(--font-display); letter-spacing: -0.01em; }
+.ck-group__head .count-tag { font: 400 15px/1 var(--font-text); color: var(--muted); }
+.ck-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--card-gap); }
+button.ck-card { font: inherit; text-align: left; cursor: pointer; }
+.no-results { display: grid; justify-items: start; gap: var(--s-3); padding: var(--s-8) 0; color: var(--muted); font-size: var(--t-lead); }
+.no-results i { font-size: 28px; }
 
-    .cat-hero-title {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 900;
-      color: var(--black);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .cat-hero-desc {
-      font-size: 0.92rem;
-      color: var(--grey-mid);
-      max-width: 680px;
-      line-height: 1.55;
-      margin: 0;
-    }
-
-    .cat-hero-count {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 800;
-      background: var(--orange-pale);
-      color: var(--orange-primary);
-      border-radius: var(--radius-pill);
-      padding: 3px 12px;
-      vertical-align: middle;
-    }
-
-    .cat-breadcrumb-bar {
-      background: var(--gray-off);
-      border-bottom: 1px solid var(--orange-pale);
-      padding: 10px 20px;
-    }
-
-    /* Breadcrumb */
-    .cat-breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 0.78rem;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      opacity: 0.9;
-      
-    }
-
-    .cat-breadcrumb a { color: rgba(0, 0, 0, 0.85); font-weight: 600; }
-    .cat-breadcrumb a:hover { color: var(--white); }
-    .cat-breadcrumb .sep { font-size: 0.6rem; opacity: 0.6; }
-    .cat-breadcrumb .current { color: var(--black); font-weight: 700; }    
-
-    
-
-    /* ── Subcategory Filter Tabs ──────── */
-    .subcat-tabs-wrapper {
-      background: var(--white);
-      border-bottom: 2px solid var(--orange-pale);
-      position: sticky;
-      /* CHANGED: was top:0 which caused the tab bar to stick at the very top of the
-         viewport and visually overlap/slide through the mega-menu-bar labels when
-         scrolling. Now uses --navbar-h (set by JS in main.js) so the tab bar always
-         sticks exactly at the bottom edge of the sticky navbar, not behind it.
-         Fallback of 72px covers the default navbar height before JS runs. */
-      top: var(--navbar-h, 72px);
-      z-index: 90;
-      box-shadow: 0 2px 12px rgba(255,107,0,0.08);
-    }
-
-    .subcat-tabs-wrapper .container {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-
-    .subcat-tabs-wrapper .container::-webkit-scrollbar { display: none; }
-
-    /* "All" + each subcategory tab */
-    .subcat-tab {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 14px 18px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--grey-dark);
-      white-space: nowrap;
-      border-bottom: 3px solid transparent;
-      transition: var(--transition);
-      cursor: pointer;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      font-family: var(--font-display);
-      letter-spacing: 0.3px;
-    }
-
-    .subcat-tab:hover {
-      color: var(--orange-primary);
-      background: var(--white-off);
-    }
-
-    .subcat-tab.active {
-      color: var(--orange-primary);
-      border-bottom-color: var(--orange-primary);
-      background: var(--white-off);
-    }
-
-    .subcat-tab .tab-count {
-      background: var(--orange-pale);
-      color: var(--orange-primary);
-      border-radius: var(--radius-pill);
-      padding: 1px 7px;
-      font-size: 0.68rem;
-      font-weight: 700;
-    }
-
-    .subcat-tab.active .tab-count {
-      background: var(--orange-primary);
-      color: var(--white);
-    }
-
-    /* ── Product Listing Area ─────────────────────────────── */
-    .cat-listing-section {
-      padding: 36px 0 60px;
-    }
-
-    /* Sort bar (above product grid) */
-    .sort-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .sort-bar-left {
-      font-size: 0.85rem;
-      color: var(--grey-mid);
-    }
-
-    .sort-bar-left strong {
-      color: var(--grey-dark);
-    }
-
-    .sort-bar-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .sort-select {
-      border: 1px solid var(--orange-pale);
-      border-radius: var(--radius-sm);
-      padding: 7px 14px;
-      font-size: 0.8rem;
-      font-family: var(--font-display);
-      font-weight: 600;
-      color: var(--grey-dark);
-      background: var(--white);
-      cursor: pointer;
-      outline: none;
-      transition: var(--transition);
-    }
-
-    .sort-select:focus {
-      border-color: var(--orange-primary);
-    }
-
-    /* ── Product Grid (category page version) ─────────────── */
-    /* Reuses .product-card from style.css but overrides grid  */
-    .cat-product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    /* Subcategory section divider inside the grid */
-    .subcat-section-heading {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 0 6px;
-      border-bottom: 2px solid var(--orange-pale);
-      margin-top: 12px;
-    }
-
-    .subcat-section-heading:first-child { margin-top: 0; }
-
-    .subcat-section-heading h3 {
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--orange-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .subcat-section-heading .count-tag {
-      font-size: 0.72rem;
-      background: var(--orange-pale);
-      color: var(--orange-primary);
-      border-radius: var(--radius-pill);
-      padding: 2px 9px;
-      font-weight: 700;
-    }
-
-    /* ── "No results" state ───────────────────────────────── */
-    .no-results {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--grey-mid);
-    }
-
-    .no-results i {
-      font-size: 2.5rem;
-      margin-bottom: 12px;
-      display: block;
-      color: var(--orange-pale);
-    }
-
-    /* ── Responsive ───────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .cat-hero { padding: 36px 16px 28px; }
-      .cat-product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-      .sort-bar { flex-direction: column; align-items: flex-start; }
-    }
-
-    @media (max-width: 480px) {
-      .cat-product-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-    }
-
+@media (max-width: 1023px) { .ck-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+  main > section.ck-catalog { padding-top: calc(var(--nav) + var(--s-6)); }
+  .ck-catalog__head { margin-bottom: var(--s-6); }
+  .ck-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ck-card .ck-card__img { --p-h: 120px; }
+  .ck-card h3 { font-size: 16px; }
+  .ck-card p { font-size: 15px; }
+  .ck-toolbar { align-items: stretch; }
+  .ck-sort { width: 100%; }
+  .ck-sort select { flex: 1; }
+}

@@ -22,7 +22,7 @@ $product      = null;
 
 /** Format a DECIMAL price the way the storefront shows it */
 function ck_price_label(float $price): string {
-    return $price > 0 ? 'As low as ₱' . number_format($price, 2) : 'Ask for Quote';
+    return $price > 0 ? 'From ₱' . number_format($price, 2) : 'Ask for Quote';
 }
 
 if ($pdo) {
@@ -49,7 +49,7 @@ if ($pdo) {
             $vstmt = $pdo->prepare(
                 "SELECT v.id, v.name, v.specs, v.price, v.image, v.badge,
                         v.variant_type, v.variant_label,
-                        CONCAT('As low as ₱', FORMAT(v.price, 2)) AS price_label
+                        CONCAT('From ₱', FORMAT(v.price, 2)) AS price_label
                  FROM product_variants AS v
                  WHERE v.product_id = :pid
                  ORDER BY v.type_order ASC, v.sort_order ASC, v.id ASC"
@@ -133,7 +133,7 @@ if (!$product) {
 
 $title      = $product['name'] . ' | CreativeKit3A';
 $meta_desc  = $product['description'] ?: 'Custom-branded corporate giveaways from CreativeKit3A.';
-$extra_css  = ['/assets/css/car-charger-adapters.css'];
+$extra_css  = ['/assets/css/category-page.css', '/assets/css/car-charger-adapters.css'];
 $active_nav = $product['cat_slug'];
 
 include __DIR__ . '/../includes/head.php';
@@ -148,98 +148,60 @@ include __DIR__ . '/../includes/navbar.php';
        BREADCRUMB BAR
        JS fills in: Home > Category > Subcategory > Item Name
        ============================================================ -->
-  <div class="items-breadcrumb-bar">
-    <div class="container">
-      <nav class="items-breadcrumb" aria-label="Breadcrumb">
-        <a href="<?= BASE_URL ?>/"><i class="fas fa-home"></i> Home</a>
-        <span class="sep"><i class="fas fa-chevron-right"></i></span>
+  <!-- PRODUCT: the product big beside its name, price and the quote button; then its variants
+       (car-charger-adapters.js renders the filter and the groups from ITEMS_DATA); then more from the category -->
+  <section class="section ck-catalog ck-item" id="item-hero" aria-labelledby="item-h1">
+    <div class="wrap">
+      <nav class="ck-crumbs items-breadcrumb" aria-label="Breadcrumb">
+        <a href="<?= BASE_URL ?>/">Home</a>
+        <span class="sep" aria-hidden="true">/</span>
         <a href="<?= BASE_URL ?>/category-page.php?cat=<?= urlencode($product['cat_slug']) ?>" id="bc-category-link" class="bc-cat"><?= e($product['cat_name']) ?></a>
-        <span class="sep"><i class="fas fa-chevron-right"></i></span>
+        <span class="sep" aria-hidden="true">/</span>
         <a href="<?= BASE_URL ?>/category-page.php?cat=<?= urlencode($product['cat_slug']) ?>" id="bc-subcat-link" class="bc-subcat"><?= e($product['subcat_name']) ?></a>
-        <span class="sep"><i class="fas fa-chevron-right"></i></span>
+        <span class="sep" aria-hidden="true">/</span>
         <span class="current" id="bc-item-name"><?= e($product['name']) ?></span>
       </nav>
-    </div>
-  </div>
 
-  <!-- ============================================================
-       ITEM HERO BANNER
-       Rendered from the products table (JS re-applies the same ITEMS_DATA).
-       ============================================================ -->
-  <section class="item-hero" id="item-hero">
-    <div class="container item-hero-inner">
-
-      <div class="item-hero-text">
-        <span class="item-hero-eyebrow" id="item-eyebrow"><?= e($product['subcat_name']) ?></span>
-        <h1 class="item-hero-title" id="item-hero-title"><?= e($product['name']) ?></h1>
-        <p class="item-hero-desc" id="item-hero-desc"><?= e($product['description']) ?></p>
-        <div class="item-hero-meta">
-          <span class="item-hero-price" id="item-hero-price"><?= e(ck_price_label((float)$product['price_min'])) ?></span>
-          <button class="btn btn-primary item-hero-cta" id="item-hero-cta">
-            <i class="fas fa-paint-brush"></i> Request a Quote
-          </button>
+      <div class="grid ck-item__top">
+        <div class="span-5 ck-item__text">
+          <p class="t-label muted item-hero-eyebrow" id="item-eyebrow"><?= e($product['subcat_name']) ?></p>
+          <h1 id="item-h1"><span class="item-hero-title" id="item-hero-title"><?= e($product['name']) ?></span> with your logo</h1>
+          <p class="t-lead item-hero-desc" id="item-hero-desc"><?= e($product['description']) ?></p>
+          <p class="ck-item__price item-hero-price" id="item-hero-price"><?= e(ck_price_label((float)$product['price_min'])) ?></p>
+          <div class="btn-row">
+            <button class="btn btn--primary item-hero-cta" id="item-hero-cta" type="button">Request a quote</button>
+            <a class="btn btn--secondary" href="#items-grid">See the variants</a>
+          </div>
+        </div>
+        <div class="span-7 start-6 ck-item__img item-hero-img-wrap">
+          <img class="item-hero-img" id="item-hero-img"
+               src="<?= e(url($product['image'] ?: '/assets/images/placeholder.png')) ?>"
+               alt="<?= e($product['name']) ?>" width="860" height="690" fetchpriority="high">
         </div>
       </div>
 
-      <div class="item-hero-img-wrap">
-        <img class="item-hero-img" id="item-hero-img"
-             src="<?= e(url($product['image'] ?: '/assets/images/placeholder.png')) ?>"
-             alt="<?= e($product['name']) ?>">
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ============================================================
-       VARIANT FILTER TABS (injected by JS)
-       ============================================================ -->
-  <div class="item-variants-tabs-wrapper" id="item-variants-tabs-wrapper">
-    <div class="container" id="item-variants-tabs-container">
-      <!-- Tabs injected by car-charger-adapters.js -->
-    </div>
-  </div>
-
-  <!-- ============================================================
-       ITEMS LISTING
-       ============================================================ -->
-  <section class="items-listing-section">
-    <div class="container">
-
-      <!-- Sort / results bar -->
-      <div class="items-sort-bar">
-        <div class="items-sort-left">
-          Showing <strong id="items-showing-count">all</strong> variants of
-          <strong id="items-showing-name"><?= e($product['name']) ?></strong>
+      <h2 class="ck-item__variants" id="variants-h">Variants and prices</h2>
+      <div class="ck-toolbar">
+        <div class="item-variants-tabs-wrapper" id="item-variants-tabs-wrapper">
+          <div class="ck-filter" id="item-variants-tabs-container" role="group" aria-label="Filter variants"><!-- filter buttons from car-charger-adapters.js --></div>
         </div>
-        <div class="items-sort-right">
-          <label for="items-sort-select"
-                 style="font-size:0.8rem;color:var(--grey-mid);font-weight:600;">Sort by:</label>
-          <select class="sort-select" id="items-sort-select" aria-label="Sort items">
+        <div class="items-sort-right ck-sort">
+          <label for="items-sort-select">Sort</label>
+          <select class="sort-select" id="items-sort-select">
             <option value="default">Default</option>
             <option value="name-asc">Name A–Z</option>
             <option value="name-desc">Name Z–A</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
           </select>
         </div>
       </div>
+      <p class="items-sort-left ck-showing" aria-live="polite">Showing <strong id="items-showing-count">all</strong> variants of <strong id="items-showing-name"><?= e($product['name']) ?></strong></p>
+      <div class="cat-product-grid items-grid" id="items-grid"><!-- variant groups from car-charger-adapters.js --></div>
 
-      <!-- Items grid (JS renders cards here) -->
-      <div class="items-grid" id="items-grid">
-        <!-- Item cards injected by car-charger-adapters.js -->
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ============================================================
-       RELATED PRODUCTS (JS populates from SIBLING_DATA)
-       ============================================================ -->
-  <section class="related-section" id="related-section">
-    <div class="container">
-      <h2 class="related-heading">You May Also Like</h2>
-      <div class="related-grid" id="related-grid">
-        <!-- Related cards injected by JS -->
+      <div class="related-section ck-related" id="related-section">
+        <h2 class="related-heading">More from <?= e($product['cat_name']) ?></h2>
+        <div class="ck-grid related-grid" id="related-grid"><!-- related cards from car-charger-adapters.js --></div>
       </div>
     </div>
   </section>

@@ -1,5 +1,6 @@
 # Discarded / temporary files
 _trash/
+.taste-skill/
 
 # macOS system files
 .DS_Store

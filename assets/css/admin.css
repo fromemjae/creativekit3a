@@ -322,3 +322,34 @@ body.admin-body {
   .admin-content { padding: 18px 16px; }
   .admin-footer { flex-direction: column; padding: 14px 16px; }
 }
+
+/* ---- Collapsible sidebar (desktop, 1025px and up) ----
+   The top bar's menu button folds the sidebar to an icon rail
+   (.admin-shell.sidebar-collapsed, remembered in localStorage).
+   Under 1025px the same button opens the off-canvas drawer above. */
+.admin-menu-btn { display: inline-flex; align-items: center; justify-content: center; flex: none; transition: border-color 0.2s ease, color 0.2s ease; }
+.admin-menu-btn:hover { border-color: var(--admin-accent); color: var(--admin-accent); }
+
+@media (min-width: 1025px) {
+  .admin-shell { transition: grid-template-columns 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
+  .admin-shell.sidebar-collapsed { --admin-sidebar-w: 76px; }
+  .admin-shell.sidebar-collapsed .admin-sidebar { padding: 20px 10px; overflow-x: hidden; }
+  .admin-shell.sidebar-collapsed .admin-brand { justify-content: center; padding: 6px 0 22px; }
+  .admin-shell.sidebar-collapsed .admin-brand-text,
+  .admin-shell.sidebar-collapsed .admin-nav-link > span:not(.admin-nav-badge) { display: none; }
+  .admin-shell.sidebar-collapsed .admin-nav-title { height: 1px; padding: 0; margin: 12px 8px; overflow: hidden; color: transparent; background: rgba(255, 255, 255, 0.1); }
+  .admin-shell.sidebar-collapsed .admin-nav-title:first-child { display: none; }   /* the brand's rule already sits there */
+  .admin-shell.sidebar-collapsed .admin-nav-link { position: relative; justify-content: center; gap: 0; padding: 12px 0; }
+  .admin-shell.sidebar-collapsed .admin-nav-link i { font-size: 1.05rem; }
+  .admin-shell.sidebar-collapsed .admin-nav-badge { position: absolute; top: 3px; right: 4px; min-width: 18px; padding: 0 5px; font-size: 0.65rem; line-height: 16px; }
+}
+@media (min-width: 1025px) and (prefers-reduced-motion: reduce) {
+  .admin-shell { transition: none; }
+}
+
+/* ---- Readability (all staff pages) ---- */
+.admin-topbar-eyebrow { color: #B84A00; }                 /* orange text on white: 4.6:1 */
+.admin-user-text small, .admin-footer, .admin-footer span { color: #5B5F6B; }
+.admin-avatar { color: #111; }
+.admin-search input:focus-visible { outline: 3px solid #1F2B4D; outline-offset: 2px; }
+.admin-visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -59,7 +59,11 @@
     const bcCatLink    = document.getElementById('bc-category-link');
     const bcSubcatLink = document.getElementById('bc-subcat-link');
     const bcItemName   = document.getElementById('bc-item-name');
-    const catUrl       = (window.BASE_URL || '') + '/category-page.php?cat=' + encodeURIComponent(params.cat);
+    // the static build (car-charger-adapters.html) links to the static catalogue, the PHP page to the PHP one
+    const isStatic     = /\.html$/.test(window.location.pathname);
+    const catUrl       = isStatic
+      ? 'category-page.html?cat=' + encodeURIComponent(params.cat)
+      : (window.BASE_URL || '') + '/category-page.php?cat=' + encodeURIComponent(params.cat);
 
     if (bcCatLink) {
       bcCatLink.textContent = itemData.catName;
@@ -71,7 +75,7 @@
     }
     if (bcItemName) bcItemName.textContent = itemData.name;
 
-    document.title = itemData.name + ' | CreativeKit3A';
+    document.title = 'CreativeKit3A: ' + itemData.name + ' with your logo';
   }
 
 
@@ -167,36 +171,37 @@
     const badge = item.badge
       ? '<span class="item-card-badge">' + esc(item.badge) + '</span>'
       : '';
+    const price = String(item.price || '').replace(/^As low as /, 'From ');
 
-    // onerror hides the broken img and shows the .item-card-img-placeholder div instead
+    // One variant: a button that opens the quote form; onerror shows the "no image" panel instead
     return `
-      <div class="item-card" data-variant-id="${esc(item.id)}">
-        <div class="item-card-img">
-          <img src="${esc(item.img)}" alt="${esc(item.name)}" loading="lazy"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="item-card-img-placeholder" style="display:none;">
-            <i class="fas fa-image"></i>
-            <span>No image yet</span>
-          </div>
+      <button type="button" class="card ck-card item-card" data-variant-id="${esc(item.id)}" aria-label="Request a quote for ${esc(item.name)}">
+        <span class="ck-card__img item-card-img">
+          <img src="${esc(item.img)}" alt="" width="600" height="600" loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+          <span class="item-card-img-placeholder" style="display:none;">No photograph yet</span>
           ${badge}
-        </div>
-        <div class="item-card-body">
-          <div class="item-card-title">${esc(item.name)}</div>
-          <div class="item-card-specs">${esc(item.specs)}</div>
-          <div class="item-card-price">${esc(item.price)}</div>
-        </div>
-        <div class="item-card-footer">
-          <span class="customize-btn"><i class="fas fa-chevron-right"></i> CUSTOMIZE</span>
-        </div>
-      </div>`;
+        </span>
+        <span class="ck-card__title item-card-title">${esc(item.name)}</span>
+        <span class="ck-card__specs item-card-specs">${esc(item.specs)}</span>
+        <span class="ck-card__price item-card-price">${esc(price === 'Ask for Quote' ? 'Price on request' : price)}</span>
+        <span class="ck-card__action">Request a quote for this</span>
+      </button>`;
   }
 
-  /** CUSTOMIZE / card click → open the quote request modal */
+  /** A variant card opens the quote request modal */
   function bindItemClicks(grid) {
     grid.querySelectorAll('.item-card').forEach(card => {
-      card.style.cursor = 'pointer';
       card.addEventListener('click', openQuote);
     });
+  }
+
+  /** One group: its heading and its own grid, so every row starts full from the left */
+  function itemGroupHtml(label, items) {
+    return `<div class="ck-group">
+        <h3 class="ck-group__head items-type-heading">${esc(label)}</h3>
+        <div class="ck-grid">${items.map(buildItemCard).join('')}</div>
+      </div>`;
   }
 
 
@@ -235,23 +240,11 @@
     if (!activeVariantType && itemData.variantTypes && itemData.variantTypes.length) {
       itemData.variantTypes.forEach(vt => {
         const group = items.filter(i => i.variantType === vt.key);
-        if (!group.length) return;
-
-        // Section heading
-        const heading = document.createElement('div');
-        heading.className = 'items-type-heading';
-        heading.innerHTML = `<h3>${esc(vt.label)}</h3><span class="type-count">${group.length}</span>`;
-        grid.appendChild(heading);
-
-        group.forEach(item => {
-          grid.insertAdjacentHTML('beforeend', buildItemCard(item));
-        });
+        if (group.length) grid.insertAdjacentHTML('beforeend', itemGroupHtml(vt.label, group));
       });
     } else {
       // Just render flat
-      items.forEach(item => {
-        grid.insertAdjacentHTML('beforeend', buildItemCard(item));
-      });
+      grid.insertAdjacentHTML('beforeend', `<div class="ck-grid">${items.map(buildItemCard).join('')}</div>`);
     }
 
     bindItemClicks(grid);
@@ -280,21 +273,17 @@
     }
 
     siblings.forEach(sib => {
-      const card = document.createElement('div');
-      card.className = 'product-card'; // reuse existing style from style.css
+      const card = document.createElement('a');
+      card.className = 'card ck-card product-card';   // the one card recipe (storefront.css)
+      card.href = sib.url;
+      card.dataset.url = sib.url;
+      const price = String(sib.price || '').replace(/^As low as /, 'From ');
       card.innerHTML = `
-        <div class="product-card-img">
-          <img src="${esc(sib.img)}" alt="${esc(sib.name)}" loading="lazy">
+        <div class="ck-card__img product-card-img">
+          <img src="${esc(sib.img)}" alt="${esc(sib.name)}" width="600" height="600" loading="lazy">
         </div>
-        <div class="product-card-body">
-          <div class="product-card-title">${esc(sib.name)}</div>
-          <div class="product-card-price">${esc(sib.price)}</div>
-        </div>
-        <div class="product-card-footer">
-          <span class="customize-btn"><i class="fas fa-chevron-right"></i> VIEW</span>
-        </div>`;
-      card.style.cursor = 'pointer';
-      card.addEventListener('click', () => { window.location.href = sib.url; });
+        <p class="product-card-title">${esc(sib.name)}</p>
+        <p class="product-card-price">${esc(price === 'Ask for Quote' ? 'Price on request' : price)}</p>`;
       relatedGrid.appendChild(card);
     });
   }

@@ -75,6 +75,11 @@ if ($qm_pdo) {
       <p class="lm-tagline">Tell us what you need — we'll get back within 24 hours.</p>
     </div>
 
+    <?php if (function_exists('setting_on') && setting_on('maintenance_mode') && !in_array($_SESSION['user_role'] ?? '', ['admin', 'staff'], true)): ?>
+    <!-- Maintenance mode (system setting): the desk takes no new requests until it is switched off -->
+    <p class="qm-maintenance" role="status"><i class="fas fa-screwdriver-wrench" aria-hidden="true"></i> <?= htmlspecialchars(setting('maintenance_message')) ?></p>
+    <?php endif; ?>
+
     <!-- ── Step indicator ─────────────────────────────────── -->
     <div class="qm-steps" aria-label="Form progress">
       <div class="qm-step active" id="qm-step-dot-1">
@@ -154,11 +159,13 @@ if ($qm_pdo) {
           <label for="qm-quantity"><i class="fas fa-boxes"></i> Quantity <span class="qm-req">*</span></label>
           <select id="qm-quantity" class="qm-select" required>
             <option value="" disabled selected>— Select —</option>
-            <option value="50-99">50 – 99 pcs</option>
-            <option value="100-299">100 – 299 pcs</option>
-            <option value="300-499">300 – 499 pcs</option>
-            <option value="500-999">500 – 999 pcs</option>
-            <option value="1000+">1,000+ pcs</option>
+            <?php
+              // ranges below the minimum order (system setting quote_min_qty) are left out
+              $qm_min = function_exists('setting') ? max(1, (int)setting('quote_min_qty')) : 50;
+              foreach ([['50-99', '50 – 99 pcs', 99], ['100-299', '100 – 299 pcs', 299], ['300-499', '300 – 499 pcs', 499], ['500-999', '500 – 999 pcs', 999], ['1000+', '1,000+ pcs', PHP_INT_MAX]] as [$qv, $ql, $qmax]):
+                if ($qmax < $qm_min) continue; ?>
+            <option value="<?= $qv ?>"><?= $ql ?></option>
+            <?php endforeach; ?>
           </select>
         </div>
         <div class="lm-field">

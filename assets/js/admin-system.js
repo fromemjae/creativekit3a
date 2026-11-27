@@ -184,7 +184,12 @@
     // Update Tab Badges
     const invBadge = document.getElementById('tab-badge-inventory');
     const poBadge = document.getElementById('tab-badge-purchasing');
-    if (invBadge) invBadge.textContent = lowStockCount > 0 ? `${lowStockCount} alerts` : inventory.length;
+    // the word "alerts" hides on the collapsed rail, where only the number fits
+    if (invBadge) {
+      if (lowStockCount > 0) invBadge.innerHTML = `${lowStockCount}<span class="badge__word"> alerts</span>`;
+      else invBadge.textContent = inventory.length;
+      invBadge.title = lowStockCount > 0 ? `${lowStockCount} low stock alerts` : `${inventory.length} items`;
+    }
     if (poBadge) poBadge.textContent = purchasing.length;
 
     renderAuditLogs();
@@ -195,7 +200,7 @@
     if (!container) return;
 
     if (!auditLogs.length) {
-      container.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:#94a3b8;">No system audit entries found.</td></tr>`;
+      container.innerHTML = `<tr><td colspan="5" class="adm-empty">No system audit entries found.</td></tr>`;
       return;
     }
 
@@ -205,7 +210,7 @@
         <td><span class="badge-status badge-sent">${log.module}</span></td>
         <td><strong>${log.action}</strong></td>
         <td>${log.details}</td>
-        <td><i class="fas fa-user-circle"></i> ${log.user}</td>
+        <td><i class="fas fa-user-circle adm-muted" aria-hidden="true"></i> ${log.user}</td>
       </tr>
     `).join('');
   }
@@ -231,7 +236,7 @@
     });
 
     if (!filtered.length) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:32px;color:#94a3b8;"><i class="fas fa-box-open" style="font-size:2rem;margin-bottom:8px;display:block;"></i>No inventory records found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="10" class="adm-empty"><i class="fas fa-box-open" aria-hidden="true"></i>No inventory records found.</td></tr>`;
       return;
     }
 
@@ -250,17 +255,17 @@
         <tr>
           <td><strong>${item.sku}</strong></td>
           <td>
-            <div style="font-weight:700;">${item.name}</div>
-            <div style="font-size:0.75rem;color:#64748b;">${item.category}</div>
+            <strong>${item.name}</strong>
+            <div class="adm-sub">${item.category}</div>
           </td>
           <td><span class="badge-status badge-draft"><i class="fas fa-warehouse"></i> ${item.wh}</span></td>
-          <td><strong style="font-size:1rem;">${item.qty}</strong></td>
-          <td style="color:#64748b;">${item.reserved}</td>
-          <td><strong style="color:${available <= item.reorder ? '#d97706' : '#059669'};">${available}</strong></td>
-          <td><span style="color:#d97706;font-weight:600;"><i class="fas fa-bell"></i> ${item.reorder}</span></td>
+          <td class="num"><strong class="adm-qty">${item.qty}</strong></td>
+          <td class="num adm-muted">${item.reserved}</td>
+          <td class="num"><strong class="${available <= item.reorder ? 'adm-warn' : 'adm-ok'}">${available}</strong></td>
+          <td class="num"><span class="adm-reorder"><i class="fas fa-bell" aria-hidden="true"></i> ${item.reorder}</span></td>
           <td>${statusBadge}</td>
-          <td><strong>₱${totalVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
-          <td style="text-align:right;">
+          <td class="num"><strong>₱${totalVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
+          <td class="num">
             <button class="btn-admin btn-admin-secondary btn-admin-sm" onclick="AdminApp.openStockAdjustModal(${item.id})">
               <i class="fas fa-sliders-h"></i> Adjust
             </button>
@@ -275,7 +280,7 @@
     if (!tbody) return;
 
     if (!movements.length) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:#94a3b8;">No stock movement records logged.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="adm-empty">No stock movement records logged.</td></tr>`;
       return;
     }
 
@@ -285,7 +290,7 @@
         <td><span class="badge-status ${m.type === 'stock_in' ? 'badge-in-stock' : 'badge-out-of-stock'}">${m.type.replace('_', ' ').toUpperCase()}</span></td>
         <td>${m.source}</td>
         <td><strong>${m.item}</strong></td>
-        <td><strong style="color:${m.qty > 0 ? '#059669' : '#dc2626'};">${m.qty > 0 ? '+' + m.qty : m.qty}</strong></td>
+        <td class="num"><strong class="${m.qty > 0 ? 'adm-ok' : 'adm-bad'}">${m.qty > 0 ? '+' + m.qty : m.qty}</strong></td>
         <td>${m.wh}</td>
         <td>${m.date}</td>
       </tr>
@@ -300,7 +305,7 @@
     let filtered = purchasing.filter(po => (filterStatus === 'all') || po.status === filterStatus);
 
     if (!filtered.length) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:32px;color:#94a3b8;"><i class="fas fa-file-invoice" style="font-size:2rem;margin-bottom:8px;display:block;"></i>No purchase orders match criteria.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="adm-empty"><i class="fas fa-file-invoice" aria-hidden="true"></i>No purchase orders match criteria.</td></tr>`;
       return;
     }
 
@@ -323,14 +328,14 @@
           <td>${po.expectedDate || '—'}</td>
           <td>${statusBadge}</td>
           <td>${payBadge}</td>
-          <td><strong>₱${po.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
-          <td style="text-align:right;">
+          <td class="num"><strong>₱${po.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
+          <td class="num">
             ${canReceive ? `
               <button class="btn-admin btn-admin-success btn-admin-sm" onclick="AdminApp.receivePO(${po.id})">
                 <i class="fas fa-dolly"></i> Receive Goods
               </button>
             ` : `
-              <span style="font-size:0.8rem;color:#059669;font-weight:700;"><i class="fas fa-check"></i> Fulfilled</span>
+              <span class="adm-done"><i class="fas fa-check" aria-hidden="true"></i> Fulfilled</span>
             `}
           </td>
         </tr>
@@ -350,21 +355,73 @@
         <td><a href="mailto:${s.email}">${s.email}</a></td>
         <td>${s.phone}</td>
         <td><span class="badge-status badge-draft">${s.terms}</span></td>
-        <td><span style="color:#f59e0b;font-weight:700;">★ ${s.rating.toFixed(1)}</span></td>
+        <td><span class="adm-rating">★ ${s.rating.toFixed(1)}</span></td>
       </tr>
     `).join('');
   }
 
   /* ── 7. INTERACTIVE ACTIONS ── */
+  // the top bar's eyebrow and title for each system
+  const PANEL_TITLES = {
+    information: ['Information system (MIS)', 'Corporate giveaways overview'],
+    inventory: ['Inventory system', 'Giveaway stock and movements'],
+    purchasing: ['Purchasing system', 'Giveaway orders and suppliers']
+  };
+
+  function setSideOpen(open) {
+    const shell = document.querySelector('.adm-shell');
+    const toggle = document.querySelector('[data-side-toggle]');
+    if (!shell) return;
+    const wasOpen = shell.classList.contains('is-open');
+    shell.classList.toggle('is-open', open);
+    syncSideToggle();
+    if (open) document.querySelector('.adm-side .admin-tab.active')?.focus();
+    else if (wasOpen && toggle) toggle.focus();
+  }
+
+  // Desktop (1024px and up): the same button collapses the side menu to an icon rail; the choice is remembered
+  const DESKTOP = window.matchMedia('(min-width: 1024px)');
+  function setSideCollapsed(collapsed) {
+    const shell = document.querySelector('.adm-shell');
+    if (!shell) return;
+    shell.classList.toggle('is-collapsed', collapsed);
+    try { localStorage.setItem('ck_admin_side_collapsed', collapsed ? '1' : '0'); } catch (_) {}
+    syncSideToggle();
+  }
+  function syncSideToggle() {
+    const shell = document.querySelector('.adm-shell');
+    const toggle = document.querySelector('[data-side-toggle]');
+    if (!shell || !toggle) return;
+    if (DESKTOP.matches) {
+      const collapsed = shell.classList.contains('is-collapsed');
+      toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      toggle.setAttribute('aria-label', collapsed ? 'Expand the menu' : 'Collapse the menu');
+      toggle.title = collapsed ? 'Expand the menu' : 'Collapse the menu';
+    } else {
+      toggle.setAttribute('aria-expanded', shell.classList.contains('is-open') ? 'true' : 'false');
+      toggle.setAttribute('aria-label', 'Open the menu');
+      toggle.title = 'Open the menu';
+    }
+  }
+
   window.AdminApp = {
     switchTab(tabId) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content-panel').forEach(p => p.style.display = 'none');
 
+      document.querySelectorAll('.admin-tab').forEach(t => t.removeAttribute('aria-current'));
       const targetTab = document.querySelector(`[data-tab="${tabId}"]`);
       const targetPanel = document.getElementById(`panel-${tabId}`);
-      if (targetTab) targetTab.classList.add('active');
+      if (targetTab) { targetTab.classList.add('active'); targetTab.setAttribute('aria-current', 'page'); }
       if (targetPanel) targetPanel.style.display = 'block';
+
+      // the top bar names the open system; on a phone the drawer closes
+      const head = PANEL_TITLES[tabId];
+      const elTitle = document.getElementById('admin-page-title');
+      const elEyebrow = document.getElementById('admin-page-eyebrow');
+      if (head && elTitle) elTitle.textContent = head[1];
+      if (head && elEyebrow) elEyebrow.textContent = head[0];
+      setSideOpen(false);
 
       if (tabId === 'information') renderMISDashboard();
       if (tabId === 'inventory') { renderInventoryTable(); renderMovementsTable(); }
@@ -638,25 +695,37 @@
     } catch (_) {}
 
     const isAdmin = user && (user.role === 'admin' || user.email === 'admin@creativekit3a.com' || user.email === 'admin@ck3a.com');
-    const authGate = document.getElementById('admin-auth-gate');
     const userDisplay = document.getElementById('admin-user-display');
+    // signed out: the sign-in page (its nav and main); signed in: the portal. Only one of the two is in the page.
+    const signIn = [document.getElementById('adm-pub-nav'), document.getElementById('adm-pub-main')];
+    const shell = document.querySelector('.adm-shell');
 
     if (!isAdmin) {
-      if (authGate) authGate.style.display = 'flex';
+      signIn.forEach(el => { if (el) el.hidden = false; });
+      if (shell) shell.hidden = true;
       return false;
     }
 
-    if (authGate) authGate.style.display = 'none';
+    signIn.forEach(el => { if (el) el.hidden = true; });
+    if (shell) shell.hidden = false;
 
     if (userDisplay) {
       userDisplay.innerHTML = `
-        <div style="display:inline-flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:700;color:#0f172a;background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.3);padding:4px 12px;border-radius:20px;">
-          <i class="fas fa-user-shield" style="color:#ff6b00;"></i>
-          <span>${user.name || 'Admin'}</span>
-          <button onclick="AdminApp.logout()" style="background:none;border:none;color:#ef4444;cursor:pointer;font-weight:700;font-size:0.75rem;margin-left:4px;" title="Sign out of Admin">(Sign Out)</button>
+        <div class="adm-user">
+          <span class="adm-user__avatar"><i class="fas fa-user-shield" aria-hidden="true"></i></span>
+          <span class="adm-user__name">${user.name || 'Admin'}<small>${user.email || ''}</small></span>
+          <button type="button" class="adm-user__out" onclick="AdminApp.logout()" title="Sign out of Admin"><i class="fas fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button>
         </div>`;
     }
     return true;
+  }
+
+  /* Each rendered cell carries its column's name (data-label), so a phone can stack a row as a card */
+  function labelCells(tbody) {
+    const heads = [...tbody.closest('table').querySelectorAll('thead th')].map(th => th.textContent.trim());
+    tbody.querySelectorAll('tr').forEach(tr => [...tr.children].forEach((td, i) => {
+      if (td.colSpan === 1 && heads[i]) td.setAttribute('data-label', heads[i]);
+    }));
   }
 
   /* ── 8. BOOTSTRAP ── */
@@ -673,6 +742,20 @@
       updateClock();
       setInterval(updateClock, 1000);
     }
+
+    // Today's date in the top bar
+    const dateEl = document.getElementById('admin-page-date');
+    if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+    // Side menu: on a desktop the top bar's button collapses it to icons; under 1024px it opens the drawer (the close button, the scrim and Escape close it)
+    document.querySelectorAll('[data-side-toggle]').forEach(b => b.addEventListener('click', () => {
+      if (DESKTOP.matches) setSideCollapsed(!document.querySelector('.adm-shell')?.classList.contains('is-collapsed'));
+      else setSideOpen(true);
+    }));
+    DESKTOP.addEventListener('change', () => { setSideOpen(false); syncSideToggle(); });
+    syncSideToggle();
+    document.querySelectorAll('[data-side-close]').forEach(b => b.addEventListener('click', () => setSideOpen(false)));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setSideOpen(false); });
 
     // Tab bindings
     document.querySelectorAll('.admin-tab').forEach(tab => {
@@ -697,6 +780,11 @@
     if (searchInput) searchInput.addEventListener('input', handleFilterChange);
     if (catSelect) catSelect.addEventListener('change', handleFilterChange);
     if (statusSelect) statusSelect.addEventListener('change', handleFilterChange);
+
+    // Label the cells after every render
+    document.querySelectorAll('.admin-table tbody').forEach(tb => {
+      new MutationObserver(() => labelCells(tb)).observe(tb, { childList: true });
+    });
 
     // Initial render
     renderMISDashboard();

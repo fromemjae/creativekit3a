@@ -22,73 +22,68 @@ unset($_SESSION['login_errors'], $_SESSION['login_email'], $_SESSION['register_e
 $footer_flash = function_exists('get_flash') ? get_flash() : null;
 ?>
 <!-- ============================================================
-     SITE FOOTER
+     SITE FOOTER — footer.closing: row 1 the close (Request a quote), row 2 the directory and the legal row
      ============================================================ -->
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-main">
-    <div class="container">
-      <div class="footer-grid">
+<?php $footer_cats = $mega_menu ?? []; ?>
+</main>
+<footer class="footer footer--dark ground-inverse closing" id="contact" aria-labelledby="contact-heading">
+  <div class="wrap">
+    <div class="closing__cta close--word">
+      <div class="section-head section-head--row">
+        <div>
+          <h2 id="contact-heading">Request a quote for your next order</h2>
+          <p>Send the item, the quantity and the date you need it by, and we send a quote within 24 hours.</p>
+        </div>
+        <a class="btn btn--primary btn--xl" href="mailto:salesandmarketing@creativekit3a.com" onclick="openModal('quote-modal'); return false;">Request a quote<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+      </div>
+      <ul class="ck-direct grid" aria-label="Call or email us">
+        <li class="span-3"><span class="t-label muted">Mobile</span><a href="tel:+639177142774">+63 917 714 2774</a></li>
+        <li class="span-3"><span class="t-label muted">Phone</span><a href="tel:+639339927410">+63 933 992 7410</a></li>
+        <li class="span-6 start-7"><span class="t-label muted">Email</span><a href="mailto:salesandmarketing@creativekit3a.com">salesandmarketing@creativekit3a.com</a></li>
+      </ul>
+    </div>
 
-        <!-- Brand -->
-        <div class="footer-brand">
-          <a href="<?= BASE_URL ?>/" aria-label="CreativeKit3A home">
-            <span class="logo-text">CreativeKit3A</span>
+    <div class="closing__links">
+      <div class="grid">
+        <div class="span-4 stack-4">
+          <a class="nav__logo ck-logo" href="<?= BASE_URL ?>/" aria-label="CreativeKit3A home">
+            <img src="<?= BASE_URL ?>/assets/images/logo.png" alt="" width="28" height="28" loading="lazy">
+            <span class="ck-logo__name">CreativeKit3A</span>
           </a>
-          <p class="tagline">
-            VAT registered company<br>
-            2779B R. FERNANDEZ ST. CORNER BENITA ST. GAGALANGIN, TONDO, MANILA, Philippines, 1013
-          </p>
-          <div class="footer-social" aria-label="Social media links">
-            <a href="https://www.facebook.com/profile.php?id=100063787431490"
-               target="_blank" rel="noopener" aria-label="Facebook">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-          </div>
+          <p class="footer__lede">Corporate giveaways with your logo.</p>
         </div>
-
-        <!-- Contact Info -->
-        <div class="footer-col">
-          <h5>Contact Information</h5>
-          <div class="footer-contact-item">
-            <i class="fas fa-envelope icon" aria-hidden="true"></i>
-            <a href="mailto:salesandmarketing@creativekit3a.com">salesandmarketing@creativekit3a.com</a>
-          </div>
-          <div class="footer-contact-item">
-            <i class="fas fa-mobile-alt icon" aria-hidden="true"></i>
-            <a href="tel:+639177142774">+63 917 714 2774</a>
-          </div>
-          <div class="footer-contact-item">
-            <i class="fas fa-phone icon" aria-hidden="true"></i>
-            <a href="tel:+639339927410">+63 933 992 7410</a>
-          </div>
-        </div>
-
-        <!-- Customer Help -->
-        <div class="footer-col">
-          <h5>Customer Help</h5>
-          <ul>
-            <li><a href="<?= BASE_URL ?>/#corporate-heading">About</a></li>
-            <li><a href="<?= BASE_URL ?>/category-page.php">All Categories</a></li>
-            <li><a href="<?= BASE_URL ?>/#contact-heading">Contact Us</a></li>
+        <div class="span-4 footer__col">
+          <h3>Catalogue</h3>
+          <ul class="ck-two-col">
+            <?php foreach ($footer_cats as $cat_slug => $cat): ?>
+              <li><a href="<?= BASE_URL ?>/category-page.php?cat=<?= urlencode($cat_slug) ?>"><?= htmlspecialchars($cat['name']) ?></a></li>
+            <?php endforeach; ?>
           </ul>
         </div>
-
+        <div class="span-2 footer__col">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="<?= BASE_URL ?>/#how">How it works</a></li>
+            <li><a href="<?= BASE_URL ?>/#corporate-heading">About</a></li>
+            <li><a href="<?= BASE_URL ?>/#contact-heading">Contact</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=100063787431490" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+        <div class="span-2 footer__col">
+          <h3>Visit</h3>
+          <p class="ck-address">2779B R. Fernandez St. corner Benita St., Gagalangin, Tondo, Manila, Philippines, 1013</p>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <hr class="footer-divider">
-
-  <div class="container">
-    <div class="footer-bottom">
-      <p>&copy; Copyright <?= date('Y') ?>. CreativeKit3A.shop All Rights Reserved.</p>
-      <div class="footer-payments" aria-label="Accepted payment methods">
-        <img src="<?= BASE_URL ?>/assets/images/payments/mastercard.png" alt="Mastercard">
-        <img src="<?= BASE_URL ?>/assets/images/payments/visa.png" alt="Visa">
-        <img src="<?= BASE_URL ?>/assets/images/payments/paypal.png" alt="PayPal">
-        <img src="<?= BASE_URL ?>/assets/images/payments/bpi.png" alt="BPI">
-        <img src="<?= BASE_URL ?>/assets/images/payments/gcash.png" alt="GCash">
-        <img src="<?= BASE_URL ?>/assets/images/payments/maya.png" alt="Maya">
+      <div class="footer__legal">
+        <span>&copy; Copyright <?= date('Y') ?>. CreativeKit3A.shop All Rights Reserved. &nbsp; VAT registered company</span>
+        <div class="footer-payments" aria-label="Accepted payment methods">
+          <img src="<?= BASE_URL ?>/assets/images/payments/mastercard.png" alt="Mastercard" width="40" height="24" loading="lazy">
+          <img src="<?= BASE_URL ?>/assets/images/payments/visa.png" alt="Visa" width="40" height="24" loading="lazy">
+          <img src="<?= BASE_URL ?>/assets/images/payments/paypal.png" alt="PayPal" width="40" height="24" loading="lazy">
+          <img src="<?= BASE_URL ?>/assets/images/payments/bpi.png" alt="BPI" width="40" height="24" loading="lazy">
+          <img src="<?= BASE_URL ?>/assets/images/payments/gcash.png" alt="GCash" width="40" height="24" loading="lazy">
+          <img src="<?= BASE_URL ?>/assets/images/payments/maya.png" alt="Maya" width="40" height="24" loading="lazy">
+        </div>
       </div>
     </div>
   </div>
@@ -150,7 +145,7 @@ $footer_flash = function_exists('get_flash') ? get_flash() : null;
 
       <p class="lm-switch">
         Don't have an account?
-        <a href="#" onclick="closeModal('login-modal'); openModal('register-modal'); return false;">Register here</a>
+        <a href="#register-modal" onclick="closeModal('login-modal'); openModal('register-modal'); return false;">Register here</a>
       </p>
     </form>
   </div>
@@ -239,7 +234,7 @@ $footer_flash = function_exists('get_flash') ? get_flash() : null;
 
       <p class="lm-switch">
         Already have an account?
-        <a href="#" onclick="closeModal('register-modal'); openModal('login-modal'); return false;">Sign in here</a>
+        <a href="#login-modal" onclick="closeModal('register-modal'); openModal('login-modal'); return false;">Sign in here</a>
       </p>
     </form>
   </div>
@@ -251,6 +246,10 @@ $footer_flash = function_exists('get_flash') ? get_flash() : null;
 <!-- Shared JavaScript: modal controller, sidenav, sticky nav, search, image fallback, auth modals -->
 <script src="<?= htmlspecialchars(asset('/assets/js/global.js')) ?>"></script>
 <script src="<?= htmlspecialchars(asset('/assets/js/quote-modal.js')) ?>"></script>
+<!-- the design system: nav sheet, moments (system.js), hovers and presses (motion.js), the hero (layout.js) -->
+<script type="module" src="<?= htmlspecialchars(asset('/assets/kit/system.js')) ?>"></script>
+<script type="module" src="<?= htmlspecialchars(asset('/assets/kit/motion/motion.js')) ?>"></script>
+<script type="module" src="<?= htmlspecialchars(asset('/assets/kit/layout/layout.js')) ?>"></script>
 
 <?php if ($login_errors || $register_errors || $footer_flash): ?>
 <script>

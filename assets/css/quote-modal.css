@@ -487,3 +487,11 @@
   .qm-back-btn    { width: 100%; text-align: center; }
   .lm-field-row   { grid-template-columns: 1fr; }
 }
+
+/* maintenance mode notice (system setting, pages/super-admin.php) */
+.qm-maintenance {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 0 0 18px; padding: 12px 14px; border-radius: 12px;
+  background: #fff1e6; color: #7a3300; font-size: 0.9rem; line-height: 1.45;
+}
+.qm-maintenance i { margin-top: 3px; color: #ff6b00; }

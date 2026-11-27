@@ -25,6 +25,31 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     exit;
 }
 
+// Re-read the account on every request, so a role change, a deactivation or a
+// deletion made in the super admin console takes effect at once, not at next sign-in.
+$guard_pdo = function_exists('get_db') ? get_db() : null;
+if ($guard_pdo) {
+    $gs = $guard_pdo->prepare("SELECT u.role, u.is_active, u.first_name, u.last_name, u.email, COALESCE(o.status, 'active') AS org_status
+                                FROM users AS u LEFT JOIN organizations AS o ON o.id = u.organization_id
+                                WHERE u.id = :id LIMIT 1");
+    $gs->execute([':id' => (int)$_SESSION['user_id']]);
+    $guard_user = $gs->fetch();
+    $session_hours = function_exists('setting') ? max(1, (int)setting('session_hours')) : 8;
+    $expired = isset($_SESSION['login_at']) && (time() - (int)$_SESSION['login_at']) > $session_hours * 3600;
+    if (!$guard_user || !(int)$guard_user['is_active'] || $guard_user['org_status'] === 'suspended' || $expired) {
+        $_SESSION = [];
+        session_regenerate_id(true);
+        if (function_exists('set_flash')) {
+            set_flash('warning', $expired ? 'Your session ended. Please sign in again.' : 'This account is no longer active. Please contact an administrator.');
+        }
+        header('Location: ' . BASE_URL . '/pages/login.php');
+        exit;
+    }
+    $_SESSION['user_role']  = $guard_user['role'];
+    $_SESSION['user_name']  = $guard_user['first_name'] . ' ' . $guard_user['last_name'];
+    $_SESSION['user_email'] = $guard_user['email'];
+}
+
 // The staff portal is for admin & staff accounts only — customers
 // (registered from the storefront) are sent back to the shop.
 if (!in_array($_SESSION['user_role'] ?? '', ['admin', 'staff'], true)) {

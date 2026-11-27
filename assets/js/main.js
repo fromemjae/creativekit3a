@@ -943,6 +943,9 @@ const ContactForm = (() => {
    ============================================================ */
 const ScrollReveal = (() => {
   const init = () => {
+    // The storefront design (assets/kit) shows every card at once: no fade-in on scroll.
+    // Its pages carry <meta name="page-type">; older pages keep the reveal below.
+    if (document.querySelector('meta[name="page-type"]')) return;
     if (!('IntersectionObserver' in window)) return;
 
     const style = document.createElement('style');

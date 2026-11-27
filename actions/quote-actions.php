@@ -69,8 +69,16 @@ switch ($action) {
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'A valid email address is required.';
         }
-        if ($quantity <= 0) {
-            $errors[] = 'Quantity must be at least 1 unit.';
+        // system settings (pages/super-admin.php): the minimum order and the maintenance switch
+        $min_qty = max(1, (int)setting('quote_min_qty'));
+        $qty_raw = trim((string)($_POST['quantity'] ?? ''));
+        $qty_top = preg_match('/^(\d+)\s*-\s*(\d+)$/', $qty_raw, $qm) ? (int)$qm[2] : (str_ends_with($qty_raw, '+') ? PHP_INT_MAX : $quantity);
+        if ($quantity <= 0 || $qty_top < $min_qty) {
+            $errors[] = 'Quantity must be at least ' . number_format($min_qty) . ' pieces.';
+        }
+        $is_staff_session = in_array($_SESSION['user_role'] ?? '', ['admin', 'staff'], true);
+        if (setting_on('maintenance_mode') && !$is_staff_session) {
+            $errors = [setting('maintenance_message')];
         }
 
         if (!empty($errors)) {
@@ -116,6 +124,19 @@ switch ($action) {
         ]);
 
         $new_id = $pdo->lastInsertId();
+
+        // file the request under its client organization (created on its first quote)
+        if ($company !== '') {
+            $org = $pdo->prepare('SELECT id FROM organizations WHERE name = :n LIMIT 1');
+            $org->execute([':n' => $company]);
+            $org_id = $org->fetchColumn();
+            if (!$org_id) {
+                $pdo->prepare("INSERT INTO organizations (name, type, contact_email) VALUES (:n, 'client', :e)")
+                    ->execute([':n' => $company, ':e' => $email]);
+                $org_id = $pdo->lastInsertId();
+            }
+            $pdo->prepare('UPDATE quote_requests SET organization_id = :o WHERE id = :id')->execute([':o' => $org_id, ':id' => $new_id]);
+        }
 
         // Audit log entry
         $log = $pdo->prepare('INSERT INTO activity_log (user_id, action, entity_type, entity_id, details, ip_address) VALUES (:uid, :act, :type, :eid, :details, :ip)');

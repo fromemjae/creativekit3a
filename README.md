@@ -52,7 +52,7 @@ creativekit3a/
 │       ├── placeholder.png              # Automatic fallback for any missing image
 │       └── logo.png
 ├── database/
-│   └── creativekit3a.sql                # THE single database: 7 related tables, seed data & SQL demos
+│   └── creativekit3a.sql                # THE single database: 9 related tables, seed data & SQL demos
 ├── _trash/                              # Deprecated / archived files (ignored by Git)
 ├── .gitignore
 └── README.md
@@ -94,7 +94,7 @@ Launch the **XAMPP Control Panel** and start both **Apache** and **MySQL**.
    database/creativekit3a.sql
    ```
 4. Click **Go** (or **Import**).
-5. The script will automatically create `creativekit3a_db`, establish all 7 related tables with Primary/Foreign Key constraints, insert all sample seed data, and run the SQL demonstration queries.
+5. The script will automatically create `creativekit3a_db`, establish all 9 related tables with Primary/Foreign Key constraints, insert all sample seed data, and run the SQL demonstration queries.
 
 > **One database only.** `database/creativekit3a.sql` is the only SQL file. Do not create any other database — every page connects through `config/db.php` to `creativekit3a_db`.
 

@@ -81,7 +81,7 @@ if ($pdo) {
             $category_data[$p['parent_slug']]['products'][] = [
                 'id'     => (int)$p['id'],
                 'name'   => $p['name'],
-                'price'  => ((float)$p['price_min'] > 0) ? 'As low as ₱' . number_format((float)$p['price_min'], 2) : 'Ask for Quote',
+                'price'  => ((float)$p['price_min'] > 0) ? 'From ₱' . number_format((float)$p['price_min'], 2) : 'Ask for Quote',
                 'img'    => url($p['image'] ?: '/assets/images/placeholder.png'),
                 'url'    => url($url),
                 'subcat' => $p['sub_slug'],
@@ -123,7 +123,7 @@ if ($pdo) {
                 $results['products'][] = [
                     'id'     => (int)$p['id'],
                     'name'   => $p['name'],
-                    'price'  => ((float)$p['price_min'] > 0) ? 'As low as ₱' . number_format((float)$p['price_min'], 2) : 'Ask for Quote',
+                    'price'  => ((float)$p['price_min'] > 0) ? 'From ₱' . number_format((float)$p['price_min'], 2) : 'Ask for Quote',
                     'img'    => url($p['image'] ?: '/assets/images/placeholder.png'),
                     'url'    => url($url),
                     'subcat' => $p['parent_slug'],
@@ -143,8 +143,8 @@ if (!isset($category_data[$active_slug])) {
 }
 $active_cat = $category_data[$active_slug] ?? null;
 
-$title      = ($active_cat ? $active_cat['name'] . ' | ' : 'Product Categories | ') . 'CreativeKit3A';
-$meta_desc  = 'Browse our complete collection of corporate giveaways — accessories, apparel, bags, drinkware, and more.';
+$title      = 'CreativeKit3A: ' . ($active_cat ? $active_cat['name'] : 'the catalogue') . ' with your logo';
+$meta_desc  = ($active_cat ? $active_cat['name'] . ' with your company logo, priced per piece. ' : '') . 'Corporate giveaways from CreativeKit3A in Tondo, Manila: a quote within 24 hours.';
 $extra_css  = ['/assets/css/category-page.css'];
 $active_nav = $search !== '' ? '' : $active_slug;
 
@@ -156,77 +156,47 @@ include __DIR__ . '/includes/topbar.php';
 include __DIR__ . '/includes/navbar.php';
 ?>
 
-  <!-- ============================================================
-       BREADCRUMB BAR
-       ============================================================ -->
-  <div class="cat-breadcrumb-bar">
-    <div class="container">
-      <nav class="cat-breadcrumb" aria-label="Breadcrumb">
-        <a href="<?= BASE_URL ?>/"><i class="fas fa-home"></i> Home</a>
-        <span class="sep"><i class="fas fa-chevron-right"></i></span>
+<?php $cat_links = $mega_menu ?? []; ?>
+  <!-- CATALOGUE: the category's title, the categories, the subcategory filter and sort, then the
+       products in one group per subcategory (category-page.js renders the groups from CATEGORY_DATA) -->
+  <section class="section ck-catalog" id="catalogue" aria-labelledby="hero-title">
+    <div class="wrap">
+      <nav class="ck-crumbs cat-breadcrumb" aria-label="Breadcrumb">
+        <a href="<?= BASE_URL ?>/">Home</a>
+        <span class="sep" aria-hidden="true">/</span>
         <span class="current" id="hero-breadcrumb-current"><?= e($active_cat['name'] ?? 'Categories') ?></span>
       </nav>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       CATEGORY HERO BANNER
-       ============================================================ -->
-  <section class="cat-hero" aria-labelledby="hero-title">
-    <div class="container cat-hero-inner">
-      <div class="cat-hero-left">
-        <div class="cat-hero-icon-box" id="hero-icon" aria-hidden="true">
-          <i class="fas fa-mobile-alt"></i>
-        </div>
+      <div class="ck-catalog__head">
         <div>
-          <h1 class="cat-hero-title">
-            <span id="hero-title">Accessories &amp; Gadgets</span>
-            <span class="cat-hero-count" id="hero-product-count">25+</span>
-          </h1>
-          <p class="cat-hero-desc" id="hero-desc">
-            Browse our full range of custom accessories, gadgets, tech items, and desk essentials.
-          </p>
+          <h1 class="cat-hero-title"><span id="hero-title"><?= e($active_cat['name'] ?? 'Catalogue') ?></span> with your logo</h1>
+          <p class="cat-hero-desc" id="hero-desc"><?= e($active_cat['desc'] ?? '') ?></p>
         </div>
+        <p class="ck-catalog__count"><span class="cat-hero-count" id="hero-product-count"><?= e($active_cat['count'] ?? '0') ?></span> products, each with your logo</p>
+        <span id="hero-icon" hidden></span>
       </div>
-    </div>
-  </section>
 
-  <!-- ============================================================
-       SUBCATEGORY FILTER TABS (injected by JS)
-       ============================================================ -->
-  <div class="subcat-tabs-wrapper" id="subcat-tabs-wrapper">
-    <div class="container" id="subcat-tabs-container">
-      <!-- Tabs injected by JS -->
-    </div>
-  </div>
+      <nav class="ck-chips" aria-label="Categories">
+        <?php foreach ($cat_links as $cat_slug => $cat): ?>
+          <a class="ck-chip" href="<?= BASE_URL ?>/category-page.php?cat=<?= urlencode($cat_slug) ?>"<?= ($search === '' && $cat_slug === $active_slug) ? ' aria-current="page"' : '' ?>><?= e($cat['name']) ?></a>
+        <?php endforeach; ?>
+      </nav>
 
-  <!-- ============================================================
-       PRODUCT LISTING
-       ============================================================ -->
-  <section class="cat-listing-section">
-    <div class="container">
-
-      <!-- Sort bar -->
-      <div class="sort-bar">
-        <div class="sort-bar-left">
-          Showing <strong id="showing-count">all</strong> products
-          <span id="showing-in"> in <strong id="showing-subcat">all categories</strong></span>
+      <div class="ck-toolbar">
+        <div class="subcat-tabs-wrapper" id="subcat-tabs-wrapper">
+          <div class="ck-filter" id="subcat-tabs-container" role="group" aria-label="Filter by type"><!-- filter buttons from category-page.js --></div>
         </div>
-        <div class="sort-bar-right">
-          <label for="sort-select" style="font-size:0.8rem;color:var(--grey-mid);font-weight:600;">Sort by:</label>
-          <select class="sort-select" id="sort-select" aria-label="Sort products">
+        <div class="sort-bar-right ck-sort">
+          <label for="sort-select">Sort</label>
+          <select class="sort-select" id="sort-select">
             <option value="default">Default</option>
             <option value="name-asc">Name A–Z</option>
             <option value="name-desc">Name Z–A</option>
           </select>
         </div>
       </div>
+      <p class="sort-bar-left ck-showing" aria-live="polite">Showing <strong id="showing-count">all</strong> products <span id="showing-in">in <strong id="showing-subcat"><?= e($active_cat['name'] ?? 'all categories') ?></strong></span></p>
 
-      <!-- Product grid (JS renders cards here) -->
-      <div class="cat-product-grid" id="cat-product-grid">
-        <!-- Products rendered by JS based on active tab -->
-      </div>
-
+      <div class="cat-product-grid" id="cat-product-grid"><!-- product groups from category-page.js --></div>
     </div>
   </section>
 

@@ -46,6 +46,9 @@ if (!$terms) {
 if (!$pdo) {
     $errors[] = 'Registration is unavailable: the database is not connected.';
 }
+if (function_exists('setting_on') && !setting_on('registration_open')) {
+    $errors = ['New customer accounts are paused. Please send your quote request without an account, or try again later.'];
+}
 
 if (!$errors) {
     // Email must be unique (users.email has a UNIQUE index)

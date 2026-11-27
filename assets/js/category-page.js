@@ -71,31 +71,34 @@
       // product.url is built by category-page.php: it points to the item
       // (variants) page when the product has rows in product_variants,
       // and is empty otherwise (card then opens the quote modal).
-      return `
-        <div class="product-card" data-product-id="${esc(product.id)}" data-url="${esc(product.url)}">
-          <div class="product-card-img">
-            <img src="${esc(product.img)}" alt="${esc(product.name)}" loading="lazy">
+      // A product with a page is a real link; one without opens the quote form for it.
+      const price = String(product.price || '').replace(/^As low as /, 'From ');
+      const inner = `
+          <div class="ck-card__img product-card-img">
+            <img src="${esc(product.img)}" alt="${esc(product.name)}" width="600" height="600" loading="lazy">
           </div>
-          <div class="product-card-body">
-            <div class="product-card-title">${esc(product.name)}</p>
-            <div class="product-card-price">${esc(product.price)}</p>
-          </div>
-         
-        </div>`;
+          <h3 class="product-card-title">${esc(product.name)}</h3>
+          <p class="product-card-price">${esc(price === 'Ask for Quote' ? 'Price on request' : price)}</p>`;
+      return product.url
+        ? `<a class="card ck-card product-card" href="${esc(product.url)}" data-product-id="${esc(product.id)}" data-url="${esc(product.url)}">${inner}</a>`
+        : `<button type="button" class="card ck-card product-card" data-product-id="${esc(product.id)}" data-url="">${inner}</button>`;
     }
 
-    /** Card click: go to the variants page, or open the quote modal */
+    /** Cards without a page open the quote modal for that product (linked cards navigate by themselves) */
     function bindCardClicks(grid) {
-      grid.querySelectorAll('.product-card').forEach(card => {
-        card.style.cursor = 'pointer';
+      grid.querySelectorAll('button.product-card').forEach(card => {
         card.addEventListener('click', () => {
-          if (card.dataset.url) {
-            window.location.href = card.dataset.url;
-          } else if (typeof window.openQuoteFor === 'function') {
-            window.openQuoteFor(card.dataset.productId);
-          }
+          if (typeof window.openQuoteFor === 'function') window.openQuoteFor(card.dataset.productId);
         });
       });
+    }
+
+    /** One group: its heading and its own grid, so every row starts full from the left */
+    function groupHtml(label, items) {
+      return `<div class="ck-group">
+          <h2 class="ck-group__head subcat-section-heading">${esc(label)}</h2>
+          <div class="ck-grid">${items.map(buildCard).join('')}</div>
+        </div>`;
     }
 
     /* ============================================================
@@ -129,22 +132,10 @@
       if (!activeSubcat) {
         cat.subcats.forEach(sc => {
           const group = products.filter(p => p.subcat === sc.key);
-          if (!group.length) return;
-
-          // Section heading
-          const heading = document.createElement('div');
-          heading.className = 'subcat-section-heading';
-          heading.innerHTML = `<h3>${esc(sc.label)}</h3><span class="count-tag">${group.length}</span>`;
-          grid.appendChild(heading);
-
-          group.forEach(p => {
-            grid.insertAdjacentHTML('beforeend', buildCard(p));
-          });
+          if (group.length) grid.insertAdjacentHTML('beforeend', groupHtml(sc.label, group));
         });
       } else {
-        products.forEach(p => {
-          grid.insertAdjacentHTML('beforeend', buildCard(p));
-        });
+        grid.insertAdjacentHTML('beforeend', `<div class="ck-grid">${products.map(buildCard).join('')}</div>`);
       }
 
       bindCardClicks(grid);
@@ -192,7 +183,7 @@
           grid.innerHTML = '<div class="no-results"><i class="fas fa-search"></i><p>No products match "<strong>' + esc(q) + '</strong>"</p></div>';
           return;
         }
-        results.forEach(p => grid.insertAdjacentHTML('beforeend', buildCard(p)));
+        grid.insertAdjacentHTML('beforeend', `<div class="ck-grid">${results.map(buildCard).join('')}</div>`);
         bindCardClicks(grid);
       });
     }
@@ -203,6 +194,9 @@
         '<div class="no-results"><i class="fas fa-database"></i><p>No catalog data available.</p></div>';
       return;
     }
-    renderPage(slugKey, '');
+    // ?subcat=<key> (the category menu's subcategory links) opens on that subcategory's tab
+    const urlSub = new URLSearchParams(location.search).get('subcat') || '';
+    const initSub = CATEGORY_DATA[slugKey].subcats.some(sc => sc.key === urlSub) ? urlSub : '';
+    renderPage(slugKey, initSub);
 
   })();

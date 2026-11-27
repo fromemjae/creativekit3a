@@ -1,628 +1,684 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- Built from /index.php by the static build (same design as the PHP page); the modals and the
+     scripts below are this page's own (main.js posts sign-in and register to api/auth/*). -->
+<html lang="en" data-type="product" data-radius="soft" data-buttons="solid" data-motion>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Customized corporate giveaways, branded accessories, and promotional items in the Philippines. CreativeKit3A — your trusted partner.">
-  <title>Corporate Giveaways | CreativeKit3A</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CreativeKit3A: corporate giveaways with your logo, Manila</title>
+  <meta name="description" content="Jackets, tumblers, bags, gadgets and gift sets printed, engraved or embroidered with your company logo. A quote within 24 hours, from Tondo, Manila.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CreativeKit3A: corporate giveaways with your logo, Manila">
+  <meta property="og:description" content="Jackets, tumblers, bags, gadgets and gift sets printed, engraved or embroidered with your company logo. A quote within 24 hours, from Tondo, Manila.">
+  <meta property="og:image" content="share.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/images/logo.png" type="image/png">
+  <meta name="theme-color" content="#ffffff">
+  <!-- <link rel="canonical" href="https://creativekit3a.shop/"> once the live domain is confirmed -->
+  <meta name="site-kind" content="other">
+  <meta name="page-type" content="product">
 
-  <!-- Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,400..700&amp;family=Poppins:wght@900&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
-  <!-- Shared site stylesheets -->
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/kit/system.css">
+  <link rel="stylesheet" href="assets/kit/ui/cards.css">
+  <link rel="stylesheet" href="assets/kit/motion/motion.css">
+  <link rel="stylesheet" href="assets/kit/layout/layout.css">
+  <style>
+  :root {
+    --p-bg: #ffffff; --p-surface: #fff1e6; --p-ink: #1f2b4d; --p-muted: #5f6984;
+    --p-accent: #ff6b00; --p-accent-ink: #111111; --p-action: #ff6b00; --p-action-ink: #111111;
+    --p-inv-bg: #1f2b4d; --p-inv-surface: #2c3859; --p-inv-ink: #ffffff; --p-inv-muted: #a2a8b8;
+    --p-inv-accent: #ff6b00; --p-inv-accent-ink: #111111; --p-inv-action: #ff6b00; --p-inv-action-ink: #111111;
+    --font-display: "Mona Sans", system-ui, sans-serif;
+    --font-text: "Mona Sans", system-ui, sans-serif;
+    --display-weight: 400;
+    --display-tracking: -0.03em;
+    --display-tracking-xl: -0.04em;
+    --display-stretch: 104%;
+    --ly-scale: 0.96;
+  }
+  </style>
+  <link rel="stylesheet" href="assets/css/storefront.css">
   <link rel="stylesheet" href="assets/css/quote-modal.css">
+      <link rel="stylesheet" href="assets/css/home.css">
+  
+  <script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
+    <script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+  <link rel="modulepreload" href="assets/kit/moments/moments.js">
+  <link rel="modulepreload" href="assets/kit/moments/lib.js">
+  <link rel="modulepreload" href="assets/kit/moments/pinned-chapters/moment.js">
+    <!-- Base path for JS-built URLs (site may live in a subfolder, e.g. /creativekit3a) -->
+  <script>window.BASE_URL = "";</script>
 </head>
 <body>
+<!-- type: product (corporate giveaways, sold by quote)
+     deal: hero product (the range: the three hero_banners cut-outs on the stage), nav nav-mega, close close-photo
+     dealt, built as the close-word head row (no photograph without baked-in text), footer footer-columns,
+     rhythm dark-band (#about), buttons solid, mark: the client's own logo; palette: the client's orange on its
+     warm white (start.mjs brand), type bricolage (Fraunces dealt first clashes with the heavy geometric wordmark)
+     moments: pinned-chapters in #how (the three steps of an order)
+     restyle (2026-11-23): palette white-navy-tab dealt for a shop, built from the client's own orange through
+     start.mjs brand (bg #ffffff, ink navy #1f2b4d, accent #ff6b00, surface #fff1e6): navy is the orange's complement,
+     so the page runs orange, white and navy; type mona (Mona Sans; Instrument Serif dealt first: its calm editorial
+     voice works against the lively brief and the heavy wordmark); rhythm brand-band: white, white, white (#how, its frame peach), orange (#about),
+     then the navy footer (footer-dark, dealt from the product list); the header carries the old home menu again (categories, subcategories, products on hover) -->
+<header class="nav" id="site-nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo ck-logo" href="index.html" aria-label="CreativeKit3A home">
+      <img src="assets/images/logo.png" alt="" width="28" height="28">
+      <span class="ck-logo__name">CreativeKit3A</span>
+    </a>
 
-  <!-- ============================================================
-       TOP BAR
-       ============================================================ -->
-  <div class="top-bar">
-    <div class="container">
-      <ul class="top-bar-social">
-        <li>
-          <a href="https://www.facebook.com/profile.php?id=100063787431490"
-             target="_blank" rel="noopener" aria-label="Facebook">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-        </li>
-        <li class="top-bar-auth">
-          <button class="btn btn-outline btn-sm top-bar-login" onclick="openModal('login-modal')">Sign In</button>
-          <button class="btn btn-primary btn-sm top-bar-signup" onclick="openModal('register-modal')">Register</button>
-        </li>
-      </ul>
-
-      <div class="top-bar-contact">
-        <a href="mailto:salesandmarketing@creativekit3a.com">
-          <i class="fas fa-envelope icon"></i> salesandmarketing@creativekit3a.com
-        </a>
-        <a href="tel:+639177142774">
-          <i class="fas fa-mobile-alt icon"></i> +63 917 714 2774
-        </a>
-        <a href="tel:+639339927410">
-          <i class="fas fa-phone icon"></i> +63 933 992 7410
-        </a>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item ck-catalogue">
+        <a class="nav__link" href="category-page.html">Catalogue</a>
+        <div class="nav__menu ck-sheet-cats">
+          <div class="wrap">
+                          <details class="ck-fold">
+                <summary>Accessories &amp; Gadgets<span>13</span></summary>
+                <a href="category-page.html?cat=accessories-gadgets">All Accessories &amp; Gadgets</a>
+                                  <a href="category-page.html?cat=accessories-gadgets&amp;subcat=car-accessories">Car Accessories</a>
+                                  <a href="category-page.html?cat=accessories-gadgets&amp;subcat=computer-accessories">Computer Accessories</a>
+                                  <a href="category-page.html?cat=accessories-gadgets&amp;subcat=desk-accessories">Desk Accessories</a>
+                                  <a href="category-page.html?cat=accessories-gadgets&amp;subcat=mobile-accessories">Mobile Accessories</a>
+                                  <a href="category-page.html?cat=accessories-gadgets&amp;subcat=gadgets">Gadgets</a>
+                              </details>
+                          <details class="ck-fold">
+                <summary>Apparel<span>9</span></summary>
+                <a href="category-page.html?cat=apparel">All Apparel</a>
+                                  <a href="category-page.html?cat=apparel&amp;subcat=caps">Caps</a>
+                                  <a href="category-page.html?cat=apparel&amp;subcat=jackets">Jackets</a>
+                                  <a href="category-page.html?cat=apparel&amp;subcat=shirts">Shirts</a>
+                              </details>
+                          <details class="ck-fold">
+                <summary>Bags &amp; Pouches<span>13</span></summary>
+                <a href="category-page.html?cat=bags-pouches">All Bags &amp; Pouches</a>
+                                  <a href="category-page.html?cat=bags-pouches&amp;subcat=backpacks">Backpacks</a>
+                                  <a href="category-page.html?cat=bags-pouches&amp;subcat=eco-bags">Eco Bags</a>
+                                  <a href="category-page.html?cat=bags-pouches&amp;subcat=laptop-bags">Laptop Bags</a>
+                                  <a href="category-page.html?cat=bags-pouches&amp;subcat=tote-bags">Tote Bags</a>
+                                  <a href="category-page.html?cat=bags-pouches&amp;subcat=travel-bags">Travel Bags</a>
+                                  <a href="category-page.html?cat=bags-pouches&amp;subcat=lunch-bags">Lunch Bags</a>
+                                  <a href="category-page.html?cat=bags-pouches&amp;subcat=organizer-pouches">Organizer Pouches</a>
+                              </details>
+                          <details class="ck-fold">
+                <summary>Drinkware<span>9</span></summary>
+                <a href="category-page.html?cat=drinkware">All Drinkware</a>
+                                  <a href="category-page.html?cat=drinkware&amp;subcat=tumblers-and-flasks">Tumblers &amp; Flasks</a>
+                                  <a href="category-page.html?cat=drinkware&amp;subcat=mugs-and-cups">Mugs &amp; Cups</a>
+                                  <a href="category-page.html?cat=drinkware&amp;subcat=water-bottles">Water Bottles</a>
+                                  <a href="category-page.html?cat=drinkware&amp;subcat=eco-friendly">Eco-Friendly</a>
+                              </details>
+                          <details class="ck-fold">
+                <summary>Gift Set<span>8</span></summary>
+                <a href="category-page.html?cat=giftset">All Gift Set</a>
+                                  <a href="category-page.html?cat=giftset&amp;subcat=corporate">Corporate</a>
+                                  <a href="category-page.html?cat=giftset&amp;subcat=lifestyle">Lifestyle</a>
+                                  <a href="category-page.html?cat=giftset&amp;subcat=health-and-wellness">Health &amp; Wellness</a>
+                              </details>
+                          <details class="ck-fold">
+                <summary>Home Living<span>8</span></summary>
+                <a href="category-page.html?cat=home-living">All Home Living</a>
+                                  <a href="category-page.html?cat=home-living&amp;subcat=kitchen-and-dining">Kitchen &amp; Dining</a>
+                                  <a href="category-page.html?cat=home-living&amp;subcat=personal-care">Personal Care</a>
+                                  <a href="category-page.html?cat=home-living&amp;subcat=outdoor-and-lifestyle">Outdoor &amp; Lifestyle</a>
+                              </details>
+                          <details class="ck-fold">
+                <summary>Pen &amp; Paper<span>13</span></summary>
+                <a href="category-page.html?cat=pen-paper">All Pen &amp; Paper</a>
+                                  <a href="category-page.html?cat=pen-paper&amp;subcat=pens">Pens</a>
+                                  <a href="category-page.html?cat=pen-paper&amp;subcat=paper-and-notebooks">Paper &amp; Notebooks</a>
+                              </details>
+                          <details class="ck-fold">
+                <summary>PU Leather<span>9</span></summary>
+                <a href="category-page.html?cat=pu-leather">All PU Leather</a>
+                                  <a href="category-page.html?cat=pu-leather&amp;subcat=wallets-and-cases">Wallets &amp; Cases</a>
+                                  <a href="category-page.html?cat=pu-leather&amp;subcat=organizers-and-bags">Organizers &amp; Bags</a>
+                                  <a href="category-page.html?cat=pu-leather&amp;subcat=keychains-and-tags">Keychains &amp; Tags</a>
+                              </details>
+                      </div>
+        </div>
       </div>
-    </div>
-  </div>
+      <div class="nav__item"><a class="nav__link" href="index.html#how">How it works</a></div>
+      <div class="nav__item"><a class="nav__link" href="index.html#corporate-heading">About</a></div>
+      <div class="nav__item"><a class="nav__link" href="index.html#contact-heading">Contact</a></div>
+    </nav>
 
-  <!-- ============================================================
-       MAIN NAVBAR
-       ============================================================ -->
-  <nav class="navbar" role="navigation" aria-label="Main navigation">
-    <div class="navbar-inner">
+    <div class="nav__actions">
+      <!-- Search (submits to the catalog: SQL LIKE across products) -->
+      <form class="navbar-search ck-search" role="search" action="category-page.html" method="get">
+        <label class="ck-search__label" for="navbar-search-input">Search</label>
+        <input type="search" name="q" placeholder="Mugs, bags, pens" id="navbar-search-input" value="">
+        <button class="ck-search__go" type="submit" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></button>
+      </form>
 
-      <!-- Hamburger (mobile) -->
-      <button class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="sidenav">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="navbar-user-area ck-account">
+                  <button class="nav__link ck-linkbtn" type="button" onclick="openModal('login-modal')">Sign in</button>
+          <button class="nav__link ck-linkbtn" type="button" onclick="openModal('login-modal'); switchTab('register')">Register</button>
+              </div>
 
-      <!-- Logo -->
-      <a href="index.html" class="navbar-logo" aria-label="CreativeKit3A home">
-        <img src="assets/images/logo.png" alt="CreativeKit3A Logo" class="logo-img">
-        <span class="logo-text">CreativeKit3A</span>
+      <a href="#quote-modal" class="navbar-cart ck-cart" aria-label="Quote cart" onclick="openModal('quote-modal'); return false;">
+        <i class="fas fa-clipboard-list" aria-hidden="true"></i>
+        <span class="cart-count" aria-live="polite">0</span>
       </a>
 
-      <!-- Search -->
-      <div class="navbar-search" role="search">
-        <input type="search" placeholder="What are you looking for?"
-               aria-label="Search products" id="navbar-search-input">
-        <i class="fas fa-search search-icon" role="button" tabindex="0" title="Search" aria-label="Search"></i>
-      </div>
-
-      <!-- Right side links -->
-      <div class="navbar-right">
-        <nav class="navbar-links" aria-label="Secondary navigation">
-          <a href="index.html#corporate-heading">About</a>
-          <a href="category-page.html?cat=accessories-gadgets">Category</a>
-          <a href="index.html#contact-heading">Contact Us</a>
-        </nav>
-        <button class="btn-chat" onclick="openModal('quote-modal')" aria-label="Request a Quote">Request a Quote</button>
-        <a href="category-page.html?cat=accessories-gadgets" class="navbar-cart" aria-label="Shopping cart">
-          <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-          <span>Cart</span>
-          <span class="cart-count" aria-live="polite">0</span>
-        </a>
-      </div>
-
+      <a class="btn btn--primary btn-chat" href="index.html#contact-heading" onclick="openModal('quote-modal'); return false;">Request a quote</a>
     </div>
-  </nav>
 
-  <!-- ============================================================
-       MEGA MENU BAR
-       ============================================================ -->
-  <div class="mega-menu-bar" role="navigation" aria-label="Category navigation">
-    <ul class="mega-menu-nav">
-
-      <!-- ACCESSORIES & GADGETS -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=accessories-gadgets">ACCESSORIES &amp; GADGETS <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <h4>Car Accessories</h4>
-            <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car&amp;item=car-charger-adapter">Car Charger Adapters</a>
-            <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car&amp;item=car-organizers">Car Organizers &amp; Holders</a>
-            <a href="category-page.html?cat=accessories-gadgets">Car Tools &amp; Emergency Gear</a>
-            <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car&amp;item=car-dashcams">Dash Cams</a>
-            <a href="category-page.html?cat=accessories-gadgets">Dashboard Tools</a>
-            <a href="category-page.html?cat=accessories-gadgets">Flash Lights</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Computer Accessories</h4>
-            <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=computer&amp;item=computer-audio">Audio Accessories</a>
-            <a href="category-page.html?cat=accessories-gadgets">Laptop &amp; Keyboard Accessories</a>
-            <a href="category-page.html?cat=accessories-gadgets">Mouse &amp; Mouse Pads</a>
-            <a href="category-page.html?cat=accessories-gadgets">USB Hub &amp; Connectors</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Desk Accessories</h4>
-            <a href="category-page.html?cat=accessories-gadgets">Clocks &amp; Timepieces</a>
-            <a href="category-page.html?cat=accessories-gadgets">Desk Organizers &amp; Pen Holders</a>
-            <a href="category-page.html?cat=accessories-gadgets">Memo Holders &amp; Memo Cubes</a>
-            <a href="category-page.html?cat=accessories-gadgets">Mobile &amp; Gadget Stands</a>
-            <a href="category-page.html?cat=accessories-gadgets">Portable Fans &amp; Lights</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Mobile Accessories</h4>
-            <a href="category-page.html?cat=accessories-gadgets">Adapters</a>
-            <a href="category-page.html?cat=accessories-gadgets">Cables &amp; Connectors</a>
-            <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=mobile&amp;item=mobile-powerbanks">Mobile Power Banks</a>
-            <a href="category-page.html?cat=accessories-gadgets">Mobile Stands</a>
-            <a href="category-page.html?cat=accessories-gadgets">Speakers</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Gadgets</h4>
-            <a href="category-page.html?cat=accessories-gadgets">Audio &amp; Music Accessories</a>
-            <a href="category-page.html?cat=accessories-gadgets">Charging Devices</a>
-            <a href="category-page.html?cat=accessories-gadgets">Portable Fans</a>
-            <a href="category-page.html?cat=accessories-gadgets">Portable Lights</a>
-            <a href="category-page.html?cat=accessories-gadgets">Power Banks</a>
-            <a href="category-page.html?cat=accessories-gadgets">Tools</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- APPAREL -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=apparel">APPAREL <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <h4>Caps</h4>
-            <a href="category-page.html?cat=apparel">Baseball Cap</a>
-            <a href="category-page.html?cat=apparel">Bucket Hat</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Jackets</h4>
-            <a href="category-page.html?cat=apparel">Bomber Jackets</a>
-            <a href="category-page.html?cat=apparel">Corporate Jackets</a>
-            <a href="category-page.html?cat=apparel">Hoodies</a>
-            <a href="category-page.html?cat=apparel">Sports &amp; Windbreaker Jackets</a>
-            <a href="category-page.html?cat=apparel">Varsity Jackets</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Shirts</h4>
-            <a href="category-page.html?cat=apparel">Collared Shirt</a>
-            <a href="category-page.html?cat=apparel">Dri Fit Shirt</a>
-            <a href="category-page.html?cat=apparel">Golf Shirt</a>
-            <a href="category-page.html?cat=apparel">Honeycomb Shirt</a>
-            <a href="category-page.html?cat=apparel">Round Neck Shirt</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- BAGS & POUCHES -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=bags-pouches">BAGS &amp; POUCHES <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <h4>Backpacks</h4>
-            <a href="category-page.html?cat=bags-pouches">Computer Backpacks</a>
-            <a href="category-page.html?cat=bags-pouches">Sports Backpacks</a>
-            <a href="category-page.html?cat=bags-pouches">Travel Backpacks</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Eco Bags</h4>
-            <a href="category-page.html?cat=bags-pouches">Foldable Shopping Totes</a>
-            <a href="category-page.html?cat=bags-pouches">Non Woven Shopping Bags</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Laptop Bags</h4>
-            <a href="category-page.html?cat=bags-pouches">Laptop Backpacks</a>
-            <a href="category-page.html?cat=bags-pouches">Laptop Shoulder Bags</a>
-            <a href="category-page.html?cat=bags-pouches">Laptop Hand Carry Bags</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Tote Bags</h4>
-            <a href="category-page.html?cat=bags-pouches">Classic Zip Totes</a>
-            <a href="category-page.html?cat=bags-pouches">Foldable Totes</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Travel Bags</h4>
-            <a href="category-page.html?cat=bags-pouches">Back Pack Travel Bags</a>
-            <a href="category-page.html?cat=bags-pouches">Duffel Travel Bags</a>
-            <a href="category-page.html?cat=bags-pouches">Tote Travel Bag</a>
-            <a href="category-page.html?cat=bags-pouches">Weekender Travel Bag</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- DRINKWARE -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=drinkware">DRINKWARE <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <h4>Tumbler &amp; Flasks</h4>
-            <a href="car-charger-adapters.html?cat=drinkware&amp;subcat=tumbler&amp;item=tumbler-bamboo">Bamboo Tumblers</a>
-            <a href="category-page.html?cat=drinkware">Insulated &amp; Double-Walled</a>
-            <a href="category-page.html?cat=drinkware">Tumblers</a>
-            <a href="category-page.html?cat=drinkware">Stainless Steel Tumblers</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Mugs &amp; Cups</h4>
-            <a href="category-page.html?cat=drinkware">Ceramic Mugs</a>
-            <a href="category-page.html?cat=drinkware">Coffee Mugs</a>
-            <a href="category-page.html?cat=drinkware">Stainless Steel Mugs</a>
-            <a href="category-page.html?cat=drinkware">Travel Mugs with Lids</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Water Bottles</h4>
-            <a href="category-page.html?cat=drinkware">BPA-Free Bottles</a>
-            <a href="category-page.html?cat=drinkware">Sports Bottles</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- GIFT SET -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=giftset">GIFT SET <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <a href="category-page.html?cat=giftset">Active Outdoors Gift Sets</a>
-            <a href="category-page.html?cat=giftset">Desk Essentials Gift Sets</a>
-            <a href="category-page.html?cat=giftset">Employee Onboarding Sets</a>
-            <a href="category-page.html?cat=giftset">Gadget Gift Sets</a>
-            <a href="category-page.html?cat=giftset">Health &amp; Wellness Gift Sets</a>
-            <a href="category-page.html?cat=giftset">Sustainable Gift Sets</a>
-            <a href="category-page.html?cat=giftset">Work From Home Gift Sets</a>
-            <a href="category-page.html?cat=giftset">Travel Executive Gift Sets</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- HOME LIVING -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=home-living">HOME LIVING <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <a href="category-page.html?cat=home-living">Cleaning Essentials</a>
-            <a href="category-page.html?cat=home-living">Cutlery Sets</a>
-            <a href="category-page.html?cat=home-living">Hand Towels</a>
-            <a href="category-page.html?cat=home-living">Outdoor Chairs</a>
-            <a href="category-page.html?cat=home-living">Personal Care</a>
-            <a href="category-page.html?cat=home-living">Pillows</a>
-            <a href="category-page.html?cat=home-living">Portable Fans</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- PEN & PAPER -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=pen-paper">PEN &amp; PAPER <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <h4>Pen</h4>
-            <a href="car-charger-adapters.html?cat=pen-paper&amp;subcat=pen&amp;item=pen-metal">Bamboo Pens</a>
-            <a href="car-charger-adapters.html?cat=pen-paper&amp;subcat=pen&amp;item=pen-metal">Metal Pens</a>
-            <a href="category-page.html?cat=pen-paper">Plastic Pens</a>
-            <a href="category-page.html?cat=pen-paper">Pen Gift Sets</a>
-          </div>
-          <div class="mega-dropdown-col">
-            <h4>Paper</h4>
-            <a href="category-page.html?cat=pen-paper">Boxed Notes</a>
-            <a href="category-page.html?cat=pen-paper">Custom Desk Calendars</a>
-            <a href="category-page.html?cat=pen-paper">Custom Notebooks &amp; Journals</a>
-            <a href="category-page.html?cat=pen-paper">Memo Solutions</a>
-            <a href="category-page.html?cat=pen-paper">Stationery Sets</a>
-            <a href="category-page.html?cat=pen-paper">Padfolios</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- PU LEATHER -->
-      <li class="mega-menu-item">
-        <a href="category-page.html?cat=pu-leather">PU LEATHER <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <div class="mega-dropdown">
-          <div class="mega-dropdown-col">
-            <a href="category-page.html?cat=pu-leather">Card Cases</a>
-            <a href="category-page.html?cat=pu-leather">Desk Mats</a>
-            <a href="category-page.html?cat=pu-leather">Leather Pouches</a>
-            <a href="category-page.html?cat=pu-leather">Keychains</a>
-            <a href="category-page.html?cat=pu-leather">Luggage Tags</a>
-            <a href="category-page.html?cat=pu-leather">Organizers</a>
-            <a href="category-page.html?cat=pu-leather">Wallets</a>
-          </div>
-        </div>
-      </li>
-
-    </ul>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
   </div>
 
-  <!-- ============================================================
-       MOBILE SIDENAV
-       ============================================================ -->
-  <div class="sidenav-overlay" aria-hidden="true"></div>
-
-  <aside class="sidenav" id="sidenav" role="complementary" aria-label="Mobile navigation">
-    <div class="sidenav-header">
-      <span class="logo-text">CreativeKit3A</span>
-      <button class="sidenav-close" aria-label="Close menu">&times;</button>
-    </div>
-    <div class="sidenav-body">
-      <p class="sidenav-section-title">Categories</p>
-      <a href="category-page.html?cat=accessories-gadgets">ACCESSORIES &amp; GADGETS</a>
-      <a href="category-page.html?cat=apparel">APPAREL</a>
-      <a href="category-page.html?cat=bags-pouches">BAGS &amp; POUCHES</a>
-      <a href="category-page.html?cat=drinkware">DRINKWARE</a>
-      <a href="category-page.html?cat=giftset">GIFT SET</a>
-      <a href="category-page.html?cat=home-living">HOME LIVING</a>
-      <a href="category-page.html?cat=pen-paper">PEN &amp; PAPER</a>
-      <a href="category-page.html?cat=pu-leather">PU LEATHER</a>
-      <p class="sidenav-section-title">Help</p>
-      <a href="index.html#corporate-heading">About</a>
-      <a href="category-page.html?cat=accessories-gadgets">All Categories</a>
-      <a href="index.html#contact-heading">Contact Us</a>
-      <p class="sidenav-section-title">Contact</p>
-      <a href="tel:+639177142774"><i class="fas fa-mobile-alt"></i> +63 917 714 2774</a>
-      <a href="tel:+639339927410"><i class="fas fa-phone"></i> +63 933 992 7410</a>
-      <a href="mailto:salesandmarketing@creativekit3a.com"><i class="fas fa-envelope"></i> salesandmarketing@creativekit3a.com</a>
-    </div>
-  </aside>
-
-  <!-- ============================================================
-       HERO CAROUSEL
-       ============================================================ -->
-  <section class="hero-section" aria-label="Hero banner">
-    <div class="hero-carousel">
-
-      <!-- Slide 1 -->
-      <div class="hero-slide active">
-        <div class="hero-slide-img">
-          <img src="assets/images/28.png" alt="Get Your Bamboo Tumbler with your desired design">
-        </div>
-        <div class="hero-slide-content">
-          <span class="eyebrow">Get Your</span>
-          <h1>BAMBOO TUMBLER</h1>
-          <h2>with your desired design</h2>
-          <p>We specialize in rush orders and make custom item personalization quick and easy.</p>
-          <a href="category-page.html?cat=drinkware" class="btn btn-white btn-large">BROWSE CATALOG</a>
-        </div>
-      </div>
-
-      <!-- Slide 2 -->
-      <div class="hero-slide">
-        <div class="hero-slide-img">
-          <img src="assets/images/27.png" alt="Custom Corporate Jackets">
-        </div>
-        <div class="hero-slide-content">
-          <span class="eyebrow">Showcase Your Brand with</span>
-          <h1>CUSTOM CORPORATE JACKETS</h1>
-          <p>Stylish and durable custom corporate jackets for events, recognition, and giveaways.</p>
-          <a href="category-page.html?cat=apparel" class="btn btn-white btn-large">BROWSE CATALOG</a>
-        </div>
-      </div>
-
-      <!-- Slide 3 -->
-      <div class="hero-slide">
-        <div class="hero-slide-img">
-          <img src="assets/images/laptop-bag.png" alt="Custom Logo Bags &amp; Pouches">
-        </div>
-        <div class="hero-slide-content">
-          <span class="eyebrow">Eco-Friendly &amp; Stylish</span>
-          <h1>CUSTOM LOGO BAGS</h1>
-          <p>Reusable, branded bags that leave a lasting impression at every corporate event.</p>
-          <a href="category-page.html?cat=bags-pouches" class="btn btn-white btn-large">BROWSE CATALOG</a>
-        </div>
-      </div>
-
-      <!-- Carousel Arrows -->
-      <button class="carousel-btn prev" aria-label="Previous slide"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
-      <button class="carousel-btn next" aria-label="Next slide"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
-
-      <!-- Carousel Dots -->
-      <div class="carousel-dots" role="tablist" aria-label="Slide dots">
-        <button class="carousel-dot active" aria-label="Slide 1"></button>
-        <button class="carousel-dot" aria-label="Slide 2"></button>
-        <button class="carousel-dot" aria-label="Slide 3"></button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ============================================================
-       FEATURED PRODUCTS
-       ============================================================ -->
-  <section class="products-section" aria-labelledby="featured-heading">
-    <div class="container">
-      <div class="products-grid">
-
-        <div class="product-card" data-url="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car&amp;item=car-charger-adapter">
-          <div class="product-card-img">
-            <img src="assets/images/1.png" alt="Single USB Logo Car Charger" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Single USB Logo Car Charger</p>
-            <p class="product-card-price">As low as ₱129.00 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-        <div class="product-card" data-url="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car&amp;item=car-charger-adapter">
-          <div class="product-card-img">
-            <img src="assets/images/2.png" alt="Dual USB Fast Charging Car Adapter" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Dual USB Fast Charging Car Adapter</p>
-            <p class="product-card-price">As low as ₱274.00 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-        <div class="product-card" data-url="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car&amp;item=car-organizers">
-          <div class="product-card-img">
-            <img src="assets/images/car-organizer.png" alt="Car Organizer" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Car Organizer</p>
-            <p class="product-card-price">As low as ₱88.00 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-        <div class="product-card" data-url="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car&amp;item=car-dashcams">
-          <div class="product-card-img">
-            <img src="assets/images/dash-cam.png" alt="Dash Cam" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Dash Cam</p>
-            <p class="product-card-price">As low as ₱379.90 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-        <div class="product-card" data-url="category-page.html?cat=bags-pouches">
-          <div class="product-card-img">
-            <img src="assets/images/laptop-bag.png" alt="Business Laptop Bag" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Business Laptop Bag</p>
-            <p class="product-card-price">As low as ₱167.90 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-        <div class="product-card" data-url="category-page.html?cat=accessories-gadgets">
-          <div class="product-card-img">
-            <img src="assets/images/mouse-pad.png" alt="Mouse Pad" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Mouse Pad</p>
-            <p class="product-card-price">As low as ₱80.00 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-        <div class="product-card" data-url="category-page.html?cat=home-living">
-          <div class="product-card-img">
-            <img src="assets/images/handheld-vacuum.png" alt="Portable Handheld Vacuum" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Portable Handheld Vacuum</p>
-            <p class="product-card-price">As low as ₱499.00 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-        <div class="product-card" data-url="category-page.html?cat=accessories-gadgets">
-          <div class="product-card-img">
-            <img src="assets/images/wooven-clock.png" alt="Woven Clock" loading="lazy">
-          </div>
-          <div class="product-card-body">
-            <p class="product-card-title">Woven Clock</p>
-            <p class="product-card-price">As low as ₱149.40 ea</p>
-          </div>
-          <div class="product-card-footer">
-            <span class="customize-btn"><i class="fas fa-chevron-right" aria-hidden="true"></i> CUSTOMIZE</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       CORPORATE SECTION
-       ============================================================ -->
-  <section class="corporate-section" aria-labelledby="corporate-heading">
-    <div class="container">
-      <div class="corporate-inner">
-        <div class="corporate-img">
-          <img src="assets/images/hero.jpg" alt="Custom Corporate Items">
-        </div>
-        <div class="corporate-text">
-          <h3 id="corporate-heading">CreativeKit 3A — Your Trusted Partner for Custom Corporate Giveaways</h3>
-          <p>Discover premium customized giveaways with CreativeKit 3A, your reliable source for personalized wristbands, promotional items, and branded accessories. More than simple giveaways, our products help strengthen brand recognition and create lasting impressions for your clients, employees, and events.</p>
-          <p>At CreativeKit 3A, we make customization simple and hassle-free. Our streamlined design process lets you create products that perfectly match your brand's style and identity.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       CONTACT SECTION
-       ============================================================ -->
-  <section class="contact-section" aria-labelledby="contact-heading">
-    <div class="container">
-      <h6 id="contact-heading">CONTACT US</h6>
-      <div class="contact-numbers">
-        <a href="tel:+639177142774"><i class="fas fa-mobile-alt" aria-hidden="true"></i> +63 917 714 2774</a>
-        <a href="tel:+639339927410"><i class="fas fa-phone" aria-hidden="true"></i> +63 933 992 7410</a>
-      </div>
-      <p class="contact-email">
-        Email us at <a href="mailto:salesandmarketing@creativekit3a.com">salesandmarketing@creativekit3a.com</a>
-      </p>
-      <a href="#contact-heading" class="btn btn-primary btn-large">Contact Us</a>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       SITE FOOTER
-       ============================================================ -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-main">
-      <div class="container">
-        <div class="footer-grid">
-
-          <!-- Brand -->
-          <div class="footer-brand">
-            <a href="index.html" aria-label="CreativeKit3A home">
-              <span class="logo-text">CreativeKit3A</span>
-            </a>
-            <p class="tagline">
-              VAT registered company<br>
-              2779B R. FERNANDEZ ST. CORNER BENITA ST. GAGALANGIN, TONDO, MANILA, Philippines, 1013
-            </p>
-            <div class="footer-social" aria-label="Social media links">
-              <a href="https://www.facebook.com/profile.php?id=100063787431490"
-                 target="_blank" rel="noopener" aria-label="Facebook">
-                <i class="fab fa-facebook-f"></i>
+  <!-- The category bar (the old home menu): categories → subcategory columns → products, from the database -->
+  <div class="wrap mega-menu-bar">
+    <ul class="mega-menu-nav" aria-label="Categories">
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=accessories-gadgets">Accessories &amp; Gadgets <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 3;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=accessories-gadgets&amp;subcat=car-accessories">Car Accessories</a>
+                                          <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car-accessories&amp;item=car-charger-adapter">Car Charger Adapters</a>
+                                          <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car-accessories&amp;item=car-organizers">Car Organizers &amp; Holders</a>
+                                          <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car-accessories&amp;item=car-dashcams">Dash Cams</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=accessories-gadgets&amp;subcat=computer-accessories">Computer Accessories</a>
+                                          <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=computer-accessories&amp;item=computer-audio">Audio Accessories</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Laptop &amp; Keyboard Accessories</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Mouse &amp; Mouse Pads</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=accessories-gadgets&amp;subcat=desk-accessories">Desk Accessories</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Clocks &amp; Timepieces</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Desk Organizers &amp; Pen Holders</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=accessories-gadgets&amp;subcat=mobile-accessories">Mobile Accessories</a>
+                                          <a href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=mobile-accessories&amp;item=mobile-powerbanks">Mobile Power Banks</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Mobile Stands</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=accessories-gadgets&amp;subcat=gadgets">Gadgets</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Charging Devices</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Portable Fans</a>
+                                          <a href="category-page.html?cat=accessories-gadgets">Power Banks</a>
+                                                          </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=accessories-gadgets">
+                <span class="mega-dropdown__count">13 products</span>
+                <span class="mega-dropdown__name">See all Accessories &amp; Gadgets</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </a>
             </div>
           </div>
-
-          <!-- Contact Info -->
-          <div class="footer-col">
-            <h5>Contact Information</h5>
-            <div class="footer-contact-item">
-              <i class="fas fa-envelope icon" aria-hidden="true"></i>
-              <a href="mailto:salesandmarketing@creativekit3a.com">salesandmarketing@creativekit3a.com</a>
-            </div>
-            <div class="footer-contact-item">
-              <i class="fas fa-mobile-alt icon" aria-hidden="true"></i>
-              <a href="tel:+639177142774">+63 917 714 2774</a>
-            </div>
-            <div class="footer-contact-item">
-              <i class="fas fa-phone icon" aria-hidden="true"></i>
-              <a href="tel:+639339927410">+63 933 992 7410</a>
+        </li>
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=apparel">Apparel <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 3;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=apparel&amp;subcat=caps">Caps</a>
+                                          <a href="category-page.html?cat=apparel">Baseball Cap</a>
+                                          <a href="category-page.html?cat=apparel">Bucket Hat</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=apparel&amp;subcat=jackets">Jackets</a>
+                                          <a href="category-page.html?cat=apparel">Bomber Jackets</a>
+                                          <a href="category-page.html?cat=apparel">Corporate Jackets</a>
+                                          <a href="category-page.html?cat=apparel">Hoodies</a>
+                                          <a href="category-page.html?cat=apparel">Varsity Jackets</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=apparel&amp;subcat=shirts">Shirts</a>
+                                          <a href="category-page.html?cat=apparel">Collared Shirt</a>
+                                          <a href="category-page.html?cat=apparel">Dri Fit Shirt</a>
+                                          <a href="category-page.html?cat=apparel">Round Neck Shirt</a>
+                                                          </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=apparel">
+                <span class="mega-dropdown__count">9 products</span>
+                <span class="mega-dropdown__name">See all Apparel</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
             </div>
           </div>
-
-          <!-- Customer Help -->
-          <div class="footer-col">
-            <h5>Customer Help</h5>
-            <ul>
-              <li><a href="index.html#corporate-heading">About</a></li>
-              <li><a href="category-page.html?cat=accessories-gadgets">All Categories</a></li>
-              <li><a href="index.html#contact-heading">Contact Us</a></li>
-            </ul>
+        </li>
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=bags-pouches">Bags &amp; Pouches <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 4;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=bags-pouches&amp;subcat=backpacks">Backpacks</a>
+                                          <a href="category-page.html?cat=bags-pouches">Computer Backpacks</a>
+                                          <a href="category-page.html?cat=bags-pouches">Sports Backpacks</a>
+                                          <a href="category-page.html?cat=bags-pouches">Travel Backpacks</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=bags-pouches&amp;subcat=eco-bags">Eco Bags</a>
+                                          <a href="category-page.html?cat=bags-pouches">Foldable Shopping Totes</a>
+                                          <a href="category-page.html?cat=bags-pouches">Non Woven Shopping Bags</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=bags-pouches&amp;subcat=laptop-bags">Laptop Bags</a>
+                                          <a href="category-page.html?cat=bags-pouches">Laptop Backpacks</a>
+                                          <a href="category-page.html?cat=bags-pouches">Laptop Shoulder Bags</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=bags-pouches&amp;subcat=tote-bags">Tote Bags</a>
+                                          <a href="category-page.html?cat=bags-pouches">Classic Zip Totes</a>
+                                          <a href="category-page.html?cat=bags-pouches">Custom Logo Tote Bags</a>
+                                          <a href="category-page.html?cat=bags-pouches">Foldable Totes</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=bags-pouches&amp;subcat=travel-bags">Travel Bags</a>
+                                          <a href="category-page.html?cat=bags-pouches">Duffel Travel Bags</a>
+                                          <a href="category-page.html?cat=bags-pouches">Weekender Travel Bag</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=bags-pouches&amp;subcat=lunch-bags">Lunch Bags</a>
+                                          <a href="category-page.html?cat=bags-pouches">Hand Carry Lunch Bags</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=bags-pouches&amp;subcat=organizer-pouches">Organizer Pouches</a>
+                                                          </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=bags-pouches">
+                <span class="mega-dropdown__count">13 products</span>
+                <span class="mega-dropdown__name">See all Bags &amp; Pouches</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
           </div>
+        </li>
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=drinkware">Drinkware <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 4;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=drinkware&amp;subcat=tumblers-and-flasks">Tumblers &amp; Flasks</a>
+                                          <a href="car-charger-adapters.html?cat=drinkware&amp;subcat=tumblers-and-flasks&amp;item=tumbler-bamboo">Bamboo Tumblers</a>
+                                          <a href="category-page.html?cat=drinkware">Stainless Steel Tumblers</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=drinkware&amp;subcat=mugs-and-cups">Mugs &amp; Cups</a>
+                                          <a href="category-page.html?cat=drinkware">Ceramic Mugs</a>
+                                          <a href="category-page.html?cat=drinkware">Coffee Mugs</a>
+                                          <a href="category-page.html?cat=drinkware">Stainless Steel Mugs</a>
+                                          <a href="category-page.html?cat=drinkware">Travel Mugs with Lids</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=drinkware&amp;subcat=water-bottles">Water Bottles</a>
+                                          <a href="category-page.html?cat=drinkware">BPA-Free Bottles</a>
+                                          <a href="category-page.html?cat=drinkware">Sports Bottles</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=drinkware&amp;subcat=eco-friendly">Eco-Friendly</a>
+                                          <a href="category-page.html?cat=drinkware">Bamboo Drinkware</a>
+                                                          </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=drinkware">
+                <span class="mega-dropdown__count">9 products</span>
+                <span class="mega-dropdown__name">See all Drinkware</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </li>
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=giftset">Gift Set <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 3;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=giftset&amp;subcat=corporate">Corporate</a>
+                                          <a href="category-page.html?cat=giftset">Desk Essentials Gift Sets</a>
+                                          <a href="category-page.html?cat=giftset">Employee Onboarding Sets</a>
+                                          <a href="category-page.html?cat=giftset">Gadget Gift Sets</a>
+                                          <a href="category-page.html?cat=giftset">Work From Home Gift Sets</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=giftset&amp;subcat=lifestyle">Lifestyle</a>
+                                          <a href="category-page.html?cat=giftset">Active Outdoors Gift Sets</a>
+                                          <a href="category-page.html?cat=giftset">Sustainable Gift Sets</a>
+                                          <a href="category-page.html?cat=giftset">Travel Executive Gift Sets</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=giftset&amp;subcat=health-and-wellness">Health &amp; Wellness</a>
+                                          <a href="category-page.html?cat=giftset">Health &amp; Wellness Gift Sets</a>
+                                                          </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=giftset">
+                <span class="mega-dropdown__count">8 products</span>
+                <span class="mega-dropdown__name">See all Gift Set</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </li>
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=home-living">Home Living <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 3;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=home-living&amp;subcat=kitchen-and-dining">Kitchen &amp; Dining</a>
+                                          <a href="category-page.html?cat=home-living">Cleaning Essentials</a>
+                                          <a href="category-page.html?cat=home-living">Cutlery Sets</a>
+                                          <a href="category-page.html?cat=home-living">Gourmet</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=home-living&amp;subcat=personal-care">Personal Care</a>
+                                          <a href="category-page.html?cat=home-living">Hand Towels</a>
+                                          <a href="category-page.html?cat=home-living">Personal Care</a>
+                                          <a href="category-page.html?cat=home-living">Pillows</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=home-living&amp;subcat=outdoor-and-lifestyle">Outdoor &amp; Lifestyle</a>
+                                          <a href="category-page.html?cat=home-living">Outdoor Chairs</a>
+                                          <a href="category-page.html?cat=home-living">Portable Fans</a>
+                                                          </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=home-living">
+                <span class="mega-dropdown__count">8 products</span>
+                <span class="mega-dropdown__name">See all Home Living</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </li>
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=pen-paper">Pen &amp; Paper <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 2;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=pen-paper&amp;subcat=pens">Pens</a>
+                                          <a href="category-page.html?cat=pen-paper">Bamboo Pens</a>
+                                          <a href="car-charger-adapters.html?cat=pen-paper&amp;subcat=pens&amp;item=pen-metal">Metal Pens</a>
+                                          <a href="category-page.html?cat=pen-paper">Multi-Functional Pens</a>
+                                          <a href="category-page.html?cat=pen-paper">Pen Gift Sets</a>
+                                          <a href="category-page.html?cat=pen-paper">Plastic Pens</a>
+                                                              <a class="mega-dropdown-col__more" href="category-page.html?cat=pen-paper&amp;subcat=pens">All 6 products</a>
+                                      </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=pen-paper&amp;subcat=paper-and-notebooks">Paper &amp; Notebooks</a>
+                                          <a href="category-page.html?cat=pen-paper">Custom Desk Calendars</a>
+                                          <a href="category-page.html?cat=pen-paper">Custom Notebooks &amp; Journals</a>
+                                          <a href="category-page.html?cat=pen-paper">Memo Solutions</a>
+                                          <a href="category-page.html?cat=pen-paper">Office Stationery</a>
+                                          <a href="category-page.html?cat=pen-paper">Padfolios</a>
+                                                              <a class="mega-dropdown-col__more" href="category-page.html?cat=pen-paper&amp;subcat=paper-and-notebooks">All 7 products</a>
+                                      </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=pen-paper">
+                <span class="mega-dropdown__count">13 products</span>
+                <span class="mega-dropdown__name">See all Pen &amp; Paper</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </li>
+              <li class="mega-menu-item">
+          <a class="mega-menu-link" href="category-page.html?cat=pu-leather">PU Leather <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: 3;">
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=pu-leather&amp;subcat=wallets-and-cases">Wallets &amp; Cases</a>
+                                          <a href="category-page.html?cat=pu-leather">Card Cases</a>
+                                          <a href="category-page.html?cat=pu-leather">Leather Pouches</a>
+                                          <a href="category-page.html?cat=pu-leather">Wallets</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=pu-leather&amp;subcat=organizers-and-bags">Organizers &amp; Bags</a>
+                                          <a href="category-page.html?cat=pu-leather">Desk Mats</a>
+                                          <a href="category-page.html?cat=pu-leather">Gift Sets</a>
+                                          <a href="category-page.html?cat=pu-leather">Organizers</a>
+                                          <a href="category-page.html?cat=pu-leather">Travel-Related Leather Gifts</a>
+                                                          </div>
+                                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="category-page.html?cat=pu-leather&amp;subcat=keychains-and-tags">Keychains &amp; Tags</a>
+                                          <a href="category-page.html?cat=pu-leather">Keychains</a>
+                                          <a href="category-page.html?cat=pu-leather">Luggage Tags</a>
+                                                          </div>
+                              </div>
+              <a class="mega-dropdown__all" href="category-page.html?cat=pu-leather">
+                <span class="mega-dropdown__count">9 products</span>
+                <span class="mega-dropdown__name">See all PU Leather</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </li>
+          </ul>
+  </div>
+</header>
+<main id="top">
 
+  <!-- HERO: the range on the stage (hero_banners), the head row above it -->
+  <section class="hero hero--product" data-enter aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text hero__in">
+      <div class="hero__head">
+        <div>
+          <h1 id="hero-h">Corporate giveaways with <span class="ck-hl">your logo</span></h1>
+          <p class="hero__lead">Jackets, tumblers, bags, gadgets and gift sets with your logo printed, engraved or embroidered. We send a quote within 24 hours of your request.</p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="index.html#contact-heading" onclick="openModal('quote-modal'); return false;">Request a quote</a>
+          <a class="btn btn--secondary" href="category-page.html">See the catalogue</a>
         </div>
       </div>
+      <div class="hero__stage ck-range">
+                  <a class="ck-range__item" href="category-page.html?cat=apparel">
+            <img class="is-cutout" src="assets/images/hero/slide-1-custom-corporate-jackets.png" alt="Custom Corporate Jackets" width="900" height="800" fetchpriority="high">
+          </a>
+                  <a class="ck-range__item" href="car-charger-adapters.html?cat=drinkware&amp;subcat=tumblers-and-flasks&amp;item=tumbler-bamboo">
+            <img class="is-cutout" src="assets/images/hero/slide-2-bamboo-tumbler.png" alt="Bamboo Tumbler" width="900" height="800">
+          </a>
+                  <a class="ck-range__item" href="category-page.html?cat=bags-pouches">
+            <img class="is-cutout" src="assets/images/hero/slide-3-custom-logo-tote-bags.png" alt="Custom Logo Tote Bags" width="900" height="800">
+          </a>
+              </div>
+    </div></div>
+  </section>
+
+  <!-- BEST SELLERS: featured products (products.is_featured), the categories above them -->
+  <section class="section" id="products" aria-labelledby="products-heading">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <div>
+          <h2 id="products-heading">Best sellers, priced per piece</h2>
+        </div>
+        <a class="link" href="category-page.html">See all products</a>
+      </div>
+      <nav class="ck-chips" aria-label="Categories">
+                  <a class="ck-chip" href="category-page.html?cat=accessories-gadgets">Accessories &amp; Gadgets</a>
+                  <a class="ck-chip" href="category-page.html?cat=apparel">Apparel</a>
+                  <a class="ck-chip" href="category-page.html?cat=bags-pouches">Bags &amp; Pouches</a>
+                  <a class="ck-chip" href="category-page.html?cat=drinkware">Drinkware</a>
+                  <a class="ck-chip" href="category-page.html?cat=giftset">Gift Set</a>
+                  <a class="ck-chip" href="category-page.html?cat=home-living">Home Living</a>
+                  <a class="ck-chip" href="category-page.html?cat=pen-paper">Pen &amp; Paper</a>
+                  <a class="ck-chip" href="category-page.html?cat=pu-leather">PU Leather</a>
+              </nav>
+      <div class="grid ck-cards">
+                  <a class="card ck-card product-card span-3" href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=car-accessories&amp;item=car-charger-adapter" data-product-id="1">
+            <div class="ck-card__img"><img src="assets/images/items/car-charger-adapter.png" alt="Car Charger Adapters" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Car Charger Adapters</p>
+            <p class="product-card-price">From ₱85.00 each</p>
+          </a>
+                  <a class="card ck-card product-card span-3" href="category-page.html?cat=accessories-gadgets" data-product-id="5">
+            <div class="ck-card__img"><img src="assets/images/items/computer-mouse.png" alt="Mouse &amp; Mouse Pads" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Mouse &amp; Mouse Pads</p>
+            <p class="product-card-price">From ₱75.00 each</p>
+          </a>
+                  <a class="card ck-card product-card span-3" href="category-page.html?cat=accessories-gadgets" data-product-id="7">
+            <div class="ck-card__img"><img src="assets/images/items/desk-clocks.png" alt="Clocks &amp; Timepieces" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Clocks &amp; Timepieces</p>
+            <p class="product-card-price">From ₱220.00 each</p>
+          </a>
+                  <a class="card ck-card product-card span-3" href="car-charger-adapters.html?cat=accessories-gadgets&amp;subcat=mobile-accessories&amp;item=mobile-powerbanks" data-product-id="8">
+            <div class="ck-card__img"><img src="assets/images/items/mobile-powerbanks.png" alt="Mobile Power Banks" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Mobile Power Banks</p>
+            <p class="product-card-price">From ₱350.00 each</p>
+          </a>
+                  <a class="card ck-card product-card span-3" href="category-page.html?cat=accessories-gadgets" data-product-id="10">
+            <div class="ck-card__img"><img src="assets/images/items/gadgets-portable-fans.png" alt="Portable Fans" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Portable Fans</p>
+            <p class="product-card-price">From ₱180.00 each</p>
+          </a>
+                  <a class="card ck-card product-card span-3" href="category-page.html?cat=apparel" data-product-id="15">
+            <div class="ck-card__img"><img src="assets/images/items/jackets-corporate.png" alt="Corporate Jackets" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Corporate Jackets</p>
+            <p class="product-card-price">From ₱720.00 each</p>
+          </a>
+                  <a class="card ck-card product-card span-3" href="category-page.html?cat=bags-pouches" data-product-id="26">
+            <div class="ck-card__img"><img src="assets/images/items/laptop-backpack.png" alt="Laptop Backpacks" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Laptop Backpacks</p>
+            <p class="product-card-price">From ₱520.00 each</p>
+          </a>
+                  <a class="card ck-card product-card span-3" href="car-charger-adapters.html?cat=drinkware&amp;subcat=tumblers-and-flasks&amp;item=tumbler-bamboo" data-product-id="34">
+            <div class="ck-card__img"><img src="assets/images/items/tumbler-bamboo.png" alt="Bamboo Tumblers" width="600" height="600" loading="lazy"></div>
+            <p class="product-card-title">Bamboo Tumblers</p>
+            <p class="product-card-price">From ₱220.00 each</p>
+          </a>
+              </div>
+    </div>
+  </section>
+
+  <!-- HOW AN ORDER WORKS: pinned-chapters, three steps, one picture each -->
+  <section class="section" id="how" style="--h: 2" data-moment="pinned-chapters" aria-labelledby="how-h">
+    <div class="wrap mo-pc__grid">
+      <div class="mo-pc__text">
+        <h2 id="how-h">How an order works</h2>
+        <ol class="mo-pc__steps">
+          <li class="mo-pc__step">
+            <h3>Choose the item and the quantity</h3>
+            <p>Pick from the catalogue and tell us how many pieces you need. Orders start at 50 pieces.</p>
+            <figure class="mo-pc__visual mo-pc__visual--lit"><img src="assets/images/mobile-stand.png" alt="Two phone stands, one printed with a logo" width="510" height="510" loading="lazy"></figure>
+          </li>
+          <li class="mo-pc__step">
+            <h3>Choose how your logo goes on</h3>
+            <p>Logo printing, laser engraving, embroidery or sublimation, depending on the item. We can pack each piece in a custom box.</p>
+            <figure class="mo-pc__visual mo-pc__visual--lit"><img src="assets/images/items/desk-organizers.png" alt="A bamboo desk organiser engraved with a logo" width="730" height="636" loading="lazy"></figure>
+          </li>
+          <li class="mo-pc__step">
+            <h3>Approve the quote, then we produce</h3>
+            <p>We send the price for your quantity. Rush orders are possible: tell us the date you need them by.</p>
+            <figure class="mo-pc__visual mo-pc__visual--lit"><img src="assets/images/car-organizers.jpeg" alt="A car boot organiser with its compartments filled, in an open boot" width="690" height="644" loading="lazy"></figure>
+          </li>
+        </ol>
+      </div>
+      <div class="mo-pc__visuals frame"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT: the brand band (orange); the text left, four more of the range right -->
+  <section class="section ground-brand" id="about" aria-labelledby="corporate-heading">
+    <div class="wrap grid grid--top">
+      <div class="span-5 stack-5">
+        <h2 id="corporate-heading">About CreativeKit 3A</h2>
+        <p class="t-lead">CreativeKit 3A makes customised giveaways for companies: wristbands, promotional items and branded accessories for clients, employees and events.</p>
+        <ul class="rows ck-facts">
+          <li><span class="rows__name">Office</span><span class="rows__value">Gagalangin, Tondo, Manila</span></li>
+          <li><span class="rows__name">Payment</span><span class="rows__value">Card, PayPal, BPI, GCash, Maya</span></li>
+          <li><span class="rows__name">Orders</span><span class="rows__value">By quote, for your item and logo</span></li>
+        </ul>
+        <a class="link" href="https://www.facebook.com/profile.php?id=100063787431490" target="_blank" rel="noopener">See our work on Facebook</a>
+      </div>
+      <div class="span-6 start-7 ck-quad">
+        <img src="assets/images/dash-cam.png" alt="A dash cam printed with a company logo" width="376" height="360" loading="lazy">
+        <img src="assets/images/audio-accessories.png" alt="A cream Bluetooth speaker on a cord" width="440" height="430" loading="lazy">
+        <img src="assets/images/car-tool.png" alt="A car safety hammer with a printed logo" width="236" height="360" loading="lazy">
+        <img src="assets/images/usb-hub.png" alt="Three USB hubs printed with logos" width="700" height="700" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+<!-- ============================================================
+     SITE FOOTER — footer.closing: row 1 the close (Request a quote), row 2 the directory and the legal row
+     ============================================================ -->
+</main>
+<footer class="footer footer--dark ground-inverse closing" id="contact" aria-labelledby="contact-heading">
+  <div class="wrap">
+    <div class="closing__cta close--word">
+      <div class="section-head section-head--row">
+        <div>
+          <h2 id="contact-heading">Request a quote for your next order</h2>
+          <p>Send the item, the quantity and the date you need it by, and we send a quote within 24 hours.</p>
+        </div>
+        <a class="btn btn--primary btn--xl" href="mailto:salesandmarketing@creativekit3a.com" onclick="openModal('quote-modal'); return false;">Request a quote<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+      </div>
+      <ul class="ck-direct grid" aria-label="Call or email us">
+        <li class="span-3"><span class="t-label muted">Mobile</span><a href="tel:+639177142774">+63 917 714 2774</a></li>
+        <li class="span-3"><span class="t-label muted">Phone</span><a href="tel:+639339927410">+63 933 992 7410</a></li>
+        <li class="span-6 start-7"><span class="t-label muted">Email</span><a href="mailto:salesandmarketing@creativekit3a.com">salesandmarketing@creativekit3a.com</a></li>
+      </ul>
     </div>
 
-    <hr class="footer-divider">
-
-    <div class="container">
-      <div class="footer-bottom">
-        <p>&copy; Copyright 2026. CreativeKit3A.shop All Rights Reserved.</p>
+    <div class="closing__links">
+      <div class="grid">
+        <div class="span-4 stack-4">
+          <a class="nav__logo ck-logo" href="index.html" aria-label="CreativeKit3A home">
+            <img src="assets/images/logo.png" alt="" width="28" height="28" loading="lazy">
+            <span class="ck-logo__name">CreativeKit3A</span>
+          </a>
+          <p class="footer__lede">Corporate giveaways with your logo.</p>
+        </div>
+        <div class="span-4 footer__col">
+          <h3>Catalogue</h3>
+          <ul class="ck-two-col">
+                          <li><a href="category-page.html?cat=accessories-gadgets">Accessories &amp; Gadgets</a></li>
+                          <li><a href="category-page.html?cat=apparel">Apparel</a></li>
+                          <li><a href="category-page.html?cat=bags-pouches">Bags &amp; Pouches</a></li>
+                          <li><a href="category-page.html?cat=drinkware">Drinkware</a></li>
+                          <li><a href="category-page.html?cat=giftset">Gift Set</a></li>
+                          <li><a href="category-page.html?cat=home-living">Home Living</a></li>
+                          <li><a href="category-page.html?cat=pen-paper">Pen &amp; Paper</a></li>
+                          <li><a href="category-page.html?cat=pu-leather">PU Leather</a></li>
+                      </ul>
+        </div>
+        <div class="span-2 footer__col">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="index.html#how">How it works</a></li>
+            <li><a href="index.html#corporate-heading">About</a></li>
+            <li><a href="index.html#contact-heading">Contact</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=100063787431490" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+        <div class="span-2 footer__col">
+          <h3>Visit</h3>
+          <p class="ck-address">2779B R. Fernandez St. corner Benita St., Gagalangin, Tondo, Manila, Philippines, 1013</p>
+        </div>
+      </div>
+      <div class="footer__legal">
+        <span>&copy; Copyright 2026. CreativeKit3A.shop All Rights Reserved. &nbsp; VAT registered company</span>
         <div class="footer-payments" aria-label="Accepted payment methods">
-          <img src="https://pinoyballers.com/wp-content/uploads/2024/04/mastercard.png" alt="Mastercard">
-          <img src="https://pinoyballers.com/wp-content/uploads/2024/04/visa.png" alt="Visa">
-          <img src="https://pinoyballers.com/wp-content/uploads/2024/04/paypal-new.png" alt="PayPal">
-          <img src="https://pinoyballers.com/wp-content/uploads/2024/04/BPI.png" alt="BPI">
-          <img src="https://pinoyballers.com/wp-content/uploads/2024/04/paymongo_gcash.png" alt="GCash">
-          <img src="https://pinoyballers.com/wp-content/uploads/2024/04/paymongo_paymaya.png" alt="Maya">
+          <img src="assets/images/payments/mastercard.png" alt="Mastercard" width="40" height="24" loading="lazy">
+          <img src="assets/images/payments/visa.png" alt="Visa" width="40" height="24" loading="lazy">
+          <img src="assets/images/payments/paypal.png" alt="PayPal" width="40" height="24" loading="lazy">
+          <img src="assets/images/payments/bpi.png" alt="BPI" width="40" height="24" loading="lazy">
+          <img src="assets/images/payments/gcash.png" alt="GCash" width="40" height="24" loading="lazy">
+          <img src="assets/images/payments/maya.png" alt="Maya" width="40" height="24" loading="lazy">
         </div>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
 
   <!-- ============================================================
        MODALS — Auth & Request a Quote
@@ -667,7 +723,7 @@
         </div>
         <div class="lm-extras">
           <label class="lm-remember"><input type="checkbox" id="lm-remember"> Remember me</label>
-          <a href="#forgot-password" class="lm-forgot">Forgot password?</a>
+          <a href="mailto:salesandmarketing@creativekit3a.com?subject=Password%20reset" class="lm-forgot">Forgot password?</a>
         </div>
         <div class="lm-msg lm-msg--error" id="lm-login-error" hidden></div>
         <button class="btn btn-primary lm-submit" id="lm-login-btn" onclick="submitLogin()">
@@ -675,7 +731,7 @@
         </button>
         <p class="lm-switch">
           Don't have an account?
-          <a href="#" onclick="switchTab('register'); return false;">Register here</a>
+          <a href="#login-modal" onclick="switchTab('register'); return false;">Register here</a>
         </p>
       </div>
 
@@ -742,7 +798,7 @@
         </button>
         <p class="lm-switch">
           Already have an account?
-          <a href="#" onclick="switchTab('login'); return false;">Sign in here</a>
+          <a href="#login-modal" onclick="switchTab('login'); return false;">Sign in here</a>
         </p>
       </div>
     </div>
@@ -969,5 +1025,8 @@
   <!-- Shared site scripts -->
   <script src="assets/js/main.js"></script>
   <script src="assets/js/quote-modal.js"></script>
+  <script type="module" src="assets/kit/system.js"></script>
+  <script type="module" src="assets/kit/motion/motion.js"></script>
+  <script type="module" src="assets/kit/layout/layout.js"></script>
 </body>
 </html>

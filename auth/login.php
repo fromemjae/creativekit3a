@@ -53,7 +53,10 @@ if (!$pdo) {
 }
 
 // Look up user with prepared statement (prevents SQL injection)
-$stmt = $pdo->prepare('SELECT id, first_name, last_name, email, password_hash, role, is_active FROM users WHERE email = :email LIMIT 1');
+$stmt = $pdo->prepare("SELECT u.id, u.first_name, u.last_name, u.email, u.password_hash, u.role, u.is_active,
+                              COALESCE(o.status, 'active') AS org_status
+                       FROM users AS u LEFT JOIN organizations AS o ON o.id = u.organization_id
+                       WHERE u.email = :email LIMIT 1");
 $stmt->execute([':email' => $email]);
 $user = $stmt->fetch();
 
@@ -76,6 +79,12 @@ if (!$user) {
     $_SESSION['login_email']  = $email;
     header('Location: ' . $fail_url);
     exit;
+} elseif ($user['org_status'] === 'suspended') {
+    // The account's organization is suspended (pages/super-admin.php)
+    $_SESSION['login_errors'] = ['Your organization\'s access is suspended. Please contact CreativeKit3A.'];
+    $_SESSION['login_email']  = $email;
+    header('Location: ' . $fail_url);
+    exit;
 } else {
     // Successful login — set session variables (new session id prevents fixation)
     session_regenerate_id(true);
@@ -83,6 +92,7 @@ if (!$user) {
     $_SESSION['user_role']  = $user['role'];
     $_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
     $_SESSION['user_email'] = $user['email'];
+    $_SESSION['login_at']   = time();   // auth/guard.php ends the session after setting('session_hours')
 
     // Update last_login_at
     $update = $pdo->prepare('UPDATE users SET last_login_at = NOW() WHERE id = :id');

@@ -94,3 +94,5 @@ function get_flash(): ?array {
     }
     return null;
 }
+
+require_once __DIR__ . '/settings.php';   // setting() / setting_on(): system-wide settings

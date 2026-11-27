@@ -1,7 +1,7 @@
 <?php
 /**
  * includes/admin-layout.php — Opens the staff-portal shell:
- * fixed dark sidebar + slim top header. Used by every page in pages/
+ * fixed dark sidebar (collapsible: an icon rail on a desktop, a drawer under 1024px) + slim top header. Used by every page in pages/
  * (dashboard, products, product-form, quotes, reports) instead of the
  * storefront top bar / navbar. Close it with includes/admin-footer.php.
  *
@@ -34,6 +34,7 @@ $admin_nav = [
 ];
 ?>
 <div class="admin-shell" id="admin-shell">
+  <script>try{if(localStorage.getItem('ck_staff_side_collapsed')==='1')document.getElementById('admin-shell').classList.add('sidebar-collapsed')}catch(e){}</script>
 
   <!-- ============================================================
        SIDEBAR
@@ -48,7 +49,7 @@ $admin_nav = [
       <p class="admin-nav-title">Main</p>
       <?php foreach ($admin_nav as [$file, $label, $icon, $matches]): ?>
         <a href="<?= BASE_URL ?>/pages/<?= $file ?>"
-           class="admin-nav-link<?= in_array($admin_current, $matches, true) ? ' active' : '' ?>"
+           class="admin-nav-link<?= in_array($admin_current, $matches, true) ? ' active' : '' ?>" title="<?= $label ?>"
            <?= in_array($admin_current, $matches, true) ? 'aria-current="page"' : '' ?>>
           <i class="fas <?= $icon ?>" aria-hidden="true"></i>
           <span><?= $label ?></span>
@@ -58,20 +59,29 @@ $admin_nav = [
         </a>
       <?php endforeach; ?>
 
+      <?php if ($admin_role === 'admin'): ?>
+        <a href="<?= BASE_URL ?>/pages/super-admin.php"
+           class="admin-nav-link<?= $admin_current === 'super-admin.php' ? ' active' : '' ?>" title="Super admin"
+           <?= $admin_current === 'super-admin.php' ? 'aria-current="page"' : '' ?>>
+          <i class="fas fa-user-shield" aria-hidden="true"></i>
+          <span>Super admin</span>
+        </a>
+      <?php endif; ?>
+
       <p class="admin-nav-title">Quick Actions</p>
-      <a href="<?= BASE_URL ?>/pages/product-form.php" class="admin-nav-link">
+      <a href="<?= BASE_URL ?>/pages/product-form.php" class="admin-nav-link" title="Add Product">
         <i class="fas fa-plus-circle" aria-hidden="true"></i><span>Add Product</span>
       </a>
-      <a href="<?= BASE_URL ?>/pages/quotes.php?status=new" class="admin-nav-link">
+      <a href="<?= BASE_URL ?>/pages/quotes.php?status=new" class="admin-nav-link" title="New Inquiries">
         <i class="fas fa-inbox" aria-hidden="true"></i><span>New Inquiries</span>
       </a>
     </nav>
 
     <div class="admin-sidebar-footer">
-      <a href="<?= BASE_URL ?>/" class="admin-nav-link">
+      <a href="<?= BASE_URL ?>/" class="admin-nav-link" title="View Storefront">
         <i class="fas fa-store" aria-hidden="true"></i><span>View Storefront</span>
       </a>
-      <a href="<?= BASE_URL ?>/auth/logout.php" class="admin-nav-link admin-nav-logout">
+      <a href="<?= BASE_URL ?>/auth/logout.php" class="admin-nav-link admin-nav-logout" title="Logout">
         <i class="fas fa-sign-out-alt" aria-hidden="true"></i><span>Logout</span>
       </a>
     </div>
@@ -83,7 +93,7 @@ $admin_nav = [
        ============================================================ -->
   <div class="admin-main">
     <header class="admin-topbar">
-      <button type="button" class="admin-menu-btn" id="admin-menu-btn" aria-label="Open navigation" aria-controls="admin-sidebar" aria-expanded="false">
+      <button type="button" class="admin-menu-btn" id="admin-menu-btn" aria-label="Open navigation" title="Open navigation" aria-controls="admin-sidebar" aria-expanded="false">
         <i class="fas fa-bars"></i>
       </button>
 
@@ -94,7 +104,8 @@ $admin_nav = [
 
       <form class="admin-search" role="search" action="<?= BASE_URL ?>/pages/products.php" method="get">
         <i class="fas fa-search" aria-hidden="true"></i>
-        <input type="search" name="q" placeholder="Search products by name or SKU…" aria-label="Search products"
+        <label for="admin-search-q" class="admin-visually-hidden">Search products</label>
+        <input type="search" id="admin-search-q" name="q" placeholder="Search products by name or SKU…" aria-label="Search products"
                value="<?= $admin_current === 'products.php' ? htmlspecialchars($_GET['q'] ?? '') : '' ?>">
       </form>
 

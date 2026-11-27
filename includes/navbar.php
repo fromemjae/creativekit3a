@@ -1,13 +1,20 @@
 <?php
 /**
- * includes/navbar.php — Main white header, 8-category mega menu bar,
- * and mobile sidenav (CreativeKit3A Main UI).
+ * includes/navbar.php — The storefront header (CreativeKit3A design system, nav-mega).
  *
- * The mega menu and sidenav are built from the categories, products and
- * product_variants tables through config/db.php — nothing is hardcoded.
+ * Two fixed rows. The bar: the logo, four words, the product search, the account, the quote cart
+ * and Request a quote. Under it, on a laptop and wider, the category bar of the old home menu: every
+ * main category, and on hover its subcategories in columns with their products under them.
+ * On a phone the categories move into the sheet under Catalogue, one fold per category.
+ * (Before:) one fixed bar: the logo, four words,
+ * the product search, the account (Sign in / name / Logout), the quote cart and the one
+ * main action, Request a quote. On a phone /assets/kit/system.js turns it into a sheet.
+ * The category panel is built from the categories, products and product_variants tables
+ * through config/db.php, nothing is hardcoded. (The old dark top bar is folded in here;
+ * includes/topbar.php now prints nothing.)
  *
  * Optional variable:
- *   $active_nav (string) — main-category slug to highlight (adds 'active-cat')
+ *   $active_nav (string) — main-category slug of the page (marks the Catalogue word)
  */
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -16,13 +23,14 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $active_nav   = $active_nav ?? '';
 $is_logged_in = isset($_SESSION['user_id']);
-$is_staff     = in_array($_SESSION['user_role'] ?? '', ['admin', 'staff'], true);
+$user_name    = $_SESSION['user_name'] ?? '';
+$user_role    = $_SESSION['user_role'] ?? '';
+$is_staff     = in_array($user_role, ['admin', 'staff'], true);
 $search_value = trim($_GET['q'] ?? '');
 
 // -------------------------------------------------------------
-// Mega menu data: main category → subcategory columns → product links
-// (INNER JOIN on the self-referencing categories table, LEFT JOIN products
-//  so empty subcategories still show, LEFT JOIN variants for the link target)
+// Menu data: main category → subcategory columns → product links (the old home menu's
+// shape), plus each category's product list and count for the footer and the home chips
 // -------------------------------------------------------------
 $mega_menu = [];
 $nav_pdo = function_exists('get_db') ? get_db() : null;
@@ -43,14 +51,19 @@ if ($nav_pdo) {
         )->fetchAll();
         foreach ($rows as $r) {
             $cat = &$mega_menu[$r['cat_slug']];
-            $cat['name'] = $r['cat_name'];
-            $cat['cols'][$r['sub_slug']]['name'] = $r['sub_name'];
+            $cat['name']  = $r['cat_name'];
+            $cat['links'] = $cat['links'] ?? [];
+            $cat['count'] = $cat['count'] ?? 0;
+            $cat['cols'][$r['sub_slug']]['name']  = $r['sub_name'];
             $cat['cols'][$r['sub_slug']]['links'] = $cat['cols'][$r['sub_slug']]['links'] ?? [];
             if ($r['product_slug']) {
-                $cat['cols'][$r['sub_slug']]['links'][] = [
+                $cat['count']++;
+                $link = [
                     'name' => $r['product_name'],
                     'url'  => product_url($r['cat_slug'], $r['sub_slug'], $r['product_slug'], (int)$r['variant_count']),
                 ];
+                $cat['links'][] = $link;
+                $cat['cols'][$r['sub_slug']]['links'][] = $link;
             }
             unset($cat);
         }
@@ -58,119 +71,107 @@ if ($nav_pdo) {
         $mega_menu = [];
     }
 }
-
-/** ' active-cat' when the slug is the highlighted main category */
-function nav_active(string $slug): string {
-    global $active_nav;
-    return $active_nav === $slug ? ' active-cat' : '';
-}
+$chev = '<svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+$cat_href = fn(string $c, string $sub = '') => BASE_URL . '/category-page.php?cat=' . urlencode($c) . ($sub !== '' ? '&subcat=' . urlencode($sub) : '');
 ?>
-
-<!-- ============================================================
-     MAIN NAVBAR
-     ============================================================ -->
-<nav class="navbar" role="navigation" aria-label="Main navigation">
-  <div class="navbar-inner">
-
-    <!-- Hamburger (mobile) -->
-    <button class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="sidenav">
-      <span></span><span></span><span></span>
-    </button>
-
-    <!-- Logo -->
-    <a href="<?= BASE_URL ?>/" class="navbar-logo" aria-label="CreativeKit3A home">
-      <img src="<?= BASE_URL ?>/assets/images/logo.png" alt="CreativeKit3A Logo" class="logo-img">
-      <span class="logo-text">CreativeKit3A</span>
+<header class="nav" id="site-nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="nav__logo ck-logo" href="<?= BASE_URL ?>/" aria-label="CreativeKit3A home">
+      <img src="<?= BASE_URL ?>/assets/images/logo.png" alt="" width="28" height="28">
+      <span class="ck-logo__name">CreativeKit3A</span>
     </a>
 
-    <!-- Search (submits to the catalog: SQL LIKE across products) -->
-    <form class="navbar-search" role="search" action="<?= BASE_URL ?>/category-page.php" method="get">
-      <input type="search" name="q" placeholder="What are you looking for?"
-             aria-label="Search products" id="navbar-search-input" value="<?= htmlspecialchars($search_value) ?>">
-      <i class="fas fa-search search-icon" role="button" tabindex="0" title="Search" aria-label="Search"></i>
-    </form>
+    <nav class="nav__links" aria-label="Main">
+      <div class="nav__item ck-catalogue">
+        <a class="nav__link" href="<?= BASE_URL ?>/category-page.php"<?= $active_nav ? ' aria-current="page"' : '' ?>>Catalogue</a>
+        <div class="nav__menu ck-sheet-cats">
+          <div class="wrap">
+            <?php foreach ($mega_menu as $cat_slug => $cat): ?>
+              <details class="ck-fold"<?= $active_nav === $cat_slug ? ' open' : '' ?>>
+                <summary><?= htmlspecialchars($cat['name']) ?><span><?= (int)$cat['count'] ?></span></summary>
+                <a href="<?= htmlspecialchars($cat_href($cat_slug)) ?>">All <?= htmlspecialchars($cat['name']) ?></a>
+                <?php foreach ($cat['cols'] ?? [] as $sub_slug => $col): ?>
+                  <a href="<?= htmlspecialchars($cat_href($cat_slug, $sub_slug)) ?>"><?= htmlspecialchars($col['name']) ?></a>
+                <?php endforeach; ?>
+              </details>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      </div>
+      <div class="nav__item"><a class="nav__link" href="<?= BASE_URL ?>/#how">How it works</a></div>
+      <div class="nav__item"><a class="nav__link" href="<?= BASE_URL ?>/#corporate-heading">About</a></div>
+      <div class="nav__item"><a class="nav__link" href="<?= BASE_URL ?>/#contact-heading">Contact</a></div>
+    </nav>
 
-    <!-- Right side links -->
-    <div class="navbar-right">
-      <nav class="navbar-links" aria-label="Secondary navigation">
-        <a href="<?= BASE_URL ?>/#corporate-heading">About</a>
-        <a href="<?= BASE_URL ?>/category-page.php"
-          <?= $active_nav ? 'style="color:var(--orange-primary);font-weight:700;"' : '' ?>>Category</a>
-        <a href="<?= BASE_URL ?>/#contact-heading">Contact Us</a>
-      </nav>
-      <button class="btn-chat" onclick="openModal('quote-modal')" aria-label="Request a Quote">Request a Quote</button>
-      <a href="#" class="navbar-cart" aria-label="Quote cart" onclick="openModal('quote-modal'); return false;">
-        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-        <span>Cart</span>
+    <div class="nav__actions">
+      <!-- Search (submits to the catalog: SQL LIKE across products) -->
+      <form class="navbar-search ck-search" role="search" action="<?= BASE_URL ?>/category-page.php" method="get">
+        <label class="ck-search__label" for="navbar-search-input">Search</label>
+        <input type="search" name="q" placeholder="Mugs, bags, pens" id="navbar-search-input" value="<?= htmlspecialchars($search_value) ?>">
+        <button class="ck-search__go" type="submit" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></button>
+      </form>
+
+      <div class="navbar-user-area ck-account">
+        <?php if ($is_logged_in): ?>
+          <?php if ($is_staff): ?>
+            <a class="nav__link" href="<?= BASE_URL ?>/pages/dashboard.php"><?= htmlspecialchars($user_name) ?> · Dashboard</a>
+          <?php else: ?>
+            <span class="nav__link ck-account__name"><?= htmlspecialchars($user_name) ?></span>
+          <?php endif; ?>
+          <a class="nav__link" href="<?= BASE_URL ?>/auth/logout.php">Log out</a>
+        <?php else: ?>
+          <button class="nav__link ck-linkbtn" type="button" onclick="openModal('login-modal')">Sign in</button>
+          <button class="nav__link ck-linkbtn" type="button" onclick="openModal('register-modal')">Register</button>
+        <?php endif; ?>
+      </div>
+
+      <a href="#quote-modal" class="navbar-cart ck-cart" aria-label="Quote cart" onclick="openModal('quote-modal'); return false;">
+        <i class="fas fa-clipboard-list" aria-hidden="true"></i>
         <span class="cart-count" aria-live="polite">0</span>
       </a>
+
+      <a class="btn btn--primary btn-chat" href="<?= BASE_URL ?>/#contact-heading" onclick="openModal('quote-modal'); return false;">Request a quote</a>
     </div>
 
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
   </div>
-</nav>
 
-<!-- ============================================================
-     MEGA MENU BAR (categories → subcategories → products, from the database)
-     ============================================================ -->
-<div class="mega-menu-bar" role="navigation" aria-label="Category navigation">
-  <ul class="mega-menu-nav">
-    <?php foreach ($mega_menu as $cat_slug => $cat): ?>
-      <li class="mega-menu-item<?= nav_active($cat_slug) ?>">
-        <a href="<?= BASE_URL ?>/category-page.php?cat=<?= urlencode($cat_slug) ?>"><?= htmlspecialchars(mb_strtoupper($cat['name'])) ?> <i class="fas fa-chevron-down chevron" aria-hidden="true"></i></a>
-        <?php $col_count = count($cat['cols']); // ≤5 columns in one row, more → two balanced rows ?>
-        <div class="mega-dropdown" style="--mega-cols: <?= $col_count <= 5 ? max(1, $col_count) : (int)ceil($col_count / 2) ?>;">
-          <?php foreach ($cat['cols'] as $col): ?>
-            <div class="mega-dropdown-col">
-              <h4><?= htmlspecialchars($col['name']) ?></h4>
-              <?php foreach ($col['links'] as $link): ?>
-                <a href="<?= htmlspecialchars(url($link['url'])) ?>"><?= htmlspecialchars($link['name']) ?></a>
-              <?php endforeach; ?>
+  <!-- The category bar (the old home menu): categories → subcategory columns → products, from the database -->
+  <div class="wrap mega-menu-bar">
+    <ul class="mega-menu-nav" aria-label="Categories">
+      <?php foreach ($mega_menu as $cat_slug => $cat):
+        $cols = $cat['cols'] ?? [];
+        $n    = count($cols); ?>
+        <li class="mega-menu-item<?= $active_nav === $cat_slug ? ' active-cat' : '' ?>">
+          <a class="mega-menu-link" href="<?= htmlspecialchars($cat_href($cat_slug)) ?>"<?= $active_nav === $cat_slug ? ' aria-current="page"' : '' ?>><?= htmlspecialchars($cat['name']) ?> <?= $chev ?></a>
+          <div class="mega-dropdown">
+            <div class="wrap mega-dropdown__in">
+              <div class="mega-dropdown__cols" style="--mega-cols: <?= $n <= 4 ? max(1, $n) : (int)ceil($n / 2) ?>;">
+                <?php foreach ($cols as $sub_slug => $col): ?>
+                  <div class="mega-dropdown-col">
+                    <a class="mega-dropdown-col__head" href="<?= htmlspecialchars($cat_href($cat_slug, $sub_slug)) ?>"><?= htmlspecialchars($col['name']) ?></a>
+                    <?php foreach (array_slice($col['links'], 0, 5) as $link): ?>
+                      <a href="<?= htmlspecialchars(url($link['url'])) ?>"><?= htmlspecialchars($link['name']) ?></a>
+                    <?php endforeach; ?>
+                    <?php if (count($col['links']) > 5): ?>
+                      <a class="mega-dropdown-col__more" href="<?= htmlspecialchars($cat_href($cat_slug, $sub_slug)) ?>">All <?= count($col['links']) ?> products</a>
+                    <?php endif; ?>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+              <a class="mega-dropdown__all" href="<?= htmlspecialchars($cat_href($cat_slug)) ?>">
+                <span class="mega-dropdown__count"><?= (int)$cat['count'] ?> products</span>
+                <span class="mega-dropdown__name">See all <?= htmlspecialchars($cat['name']) ?></span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
             </div>
-          <?php endforeach; ?>
-        </div>
-      </li>
-    <?php endforeach; ?>
-  </ul>
-</div>
-
-<!-- ============================================================
-     MOBILE SIDENAV
-     ============================================================ -->
-<div class="sidenav-overlay" aria-hidden="true"></div>
-
-<aside class="sidenav" id="sidenav" role="complementary" aria-label="Mobile navigation">
-  <div class="sidenav-header">
-    <span class="logo-text">CreativeKit3A</span>
-    <button class="sidenav-close" aria-label="Close menu">&times;</button>
+          </div>
+        </li>
+      <?php endforeach; ?>
+    </ul>
   </div>
-  <div class="sidenav-body">
-    <?php if ($is_staff): ?>
-      <p class="sidenav-section-title">Staff Portal</p>
-      <a href="<?= BASE_URL ?>/pages/dashboard.php">Dashboard</a>
-      <a href="<?= BASE_URL ?>/pages/products.php">Products</a>
-      <a href="<?= BASE_URL ?>/pages/quotes.php">Quotes</a>
-      <a href="<?= BASE_URL ?>/pages/reports.php">Reports</a>
-    <?php endif; ?>
-    <p class="sidenav-section-title">Categories</p>
-    <?php foreach ($mega_menu as $cat_slug => $cat): ?>
-      <a href="<?= BASE_URL ?>/category-page.php?cat=<?= urlencode($cat_slug) ?>"><?= htmlspecialchars(mb_strtoupper($cat['name'])) ?></a>
-    <?php endforeach; ?>
-    <p class="sidenav-section-title">Quotation</p>
-    <a href="#" onclick="closeDrawer(); openModal('quote-modal'); return false;"><i class="fas fa-paper-plane"></i> Request a Quote</a>
-    <p class="sidenav-section-title">Help</p>
-    <a href="<?= BASE_URL ?>/#corporate-heading">About</a>
-    <a href="<?= BASE_URL ?>/category-page.php">All Categories</a>
-    <a href="<?= BASE_URL ?>/#contact-heading">Contact Us</a>
-    <p class="sidenav-section-title">Account</p>
-    <?php if ($is_logged_in): ?>
-      <a href="<?= BASE_URL ?>/auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-    <?php else: ?>
-      <a href="#" onclick="openModal('login-modal'); return false;"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-      <a href="#" onclick="openModal('register-modal'); return false;"><i class="fas fa-user-plus"></i> Register</a>
-    <?php endif; ?>
-    <p class="sidenav-section-title">Contact</p>
-    <a href="tel:+639177142774"><i class="fas fa-mobile-alt"></i> +63 917 714 2774</a>
-    <a href="tel:+639339927410"><i class="fas fa-phone"></i> +63 933 992 7410</a>
-    <a href="mailto:salesandmarketing@creativekit3a.com"><i class="fas fa-envelope"></i> salesandmarketing@creativekit3a.com</a>
-  </div>
-</aside>
+</header>
+<main id="top">
