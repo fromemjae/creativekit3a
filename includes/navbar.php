@@ -26,7 +26,7 @@ $is_logged_in = isset($_SESSION['user_id']);
 $user_name    = $_SESSION['user_name'] ?? '';
 $user_role    = $_SESSION['user_role'] ?? '';
 $is_staff     = in_array($user_role, ['admin', 'staff'], true);
-$search_value = trim($_GET['q'] ?? '');
+$search_value = trim($_GET['q'] ?? $_GET['s'] ?? '');
 
 // -------------------------------------------------------------
 // Menu data: main category → subcategory columns → product links (the old home menu's
